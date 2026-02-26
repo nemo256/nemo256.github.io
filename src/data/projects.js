@@ -20,84 +20,111 @@
 // import p2_1 from '../assets/2/1.png';
 // ... etc.
 
+import p1_1 from '../assets/1/1.png';
+import p1_2 from '../assets/1/2.png';
+import p1_3 from '../assets/1/3.png';
+
+import p2_1 from '../assets/2/1.png';
+import p2_2 from '../assets/2/2.png';
+
+import p3_1 from '../assets/3/1.png';
+import p3_2 from '../assets/3/2.png';
+import p3_3 from '../assets/3/3.png';
+import p3_4 from '../assets/3/4.png';
+import p3_5 from '../assets/3/5.png';
+
+import p4_1 from '../assets/4/1.png';
+import p4_2 from '../assets/4/2.png';
+
+import p5_1 from '../assets/5/1.png';
+import p5_2 from '../assets/5/2.png';
+
+import p6_1 from '../assets/6/1.png';
+import p6_2 from '../assets/6/2.png';
+import p6_3 from '../assets/6/3.png';
+import p6_4 from '../assets/6/4.png';
+import p6_5 from '../assets/6/5.png';
+import p6_6 from '../assets/6/6.png';
+
 export const projects = [
   {
     id: 1,
-    title: 'NEURAL DASHBOARD',
-    description: 'A real-time analytics platform powered by machine learning. Visualizes complex datasets through interactive charts and predictive modeling interfaces.',
-    tags: ['React', 'Python', 'PostgreSQL'],
-    demo: 'https://example.com/demo1',   // ← leave '' to hide the button
-    github: 'https://github.com/example/neural-dashboard',
+    title: 'SGT',
+    description: 'SGT (Société Géante en Travaux) is a leading supplier of high quality products across Algeria',
+    tags: ['NEXTJS', 'REACT', 'NODEJS', 'TAILWIND'],
+    demo: 'https://sgt21.vercel.app/',
+    github: 'https://github.com/nemo256/sgt',
     images: [
-      // Replace with: p1_1, p1_2, p1_3
-      'https://picsum.photos/seed/proj1a/1200/700',
-      'https://picsum.photos/seed/proj1b/1200/700',
-      'https://picsum.photos/seed/proj1c/1200/700',
+      p1_1,
+      p1_2,
+      p1_3,
     ],
   },
   {
     id: 2,
-    title: 'VOID COMMERCE',
-    description: 'A full-stack e-commerce engine with headless architecture. Features blazing-fast SSR, real-time inventory management and a custom checkout flow.',
-    tags: ['Next.js', 'Node.js', 'PostgreSQL'],
-    demo: 'https://example.com/demo2',
-    github: '',   // ← empty = button hidden
+    title: 'EKRILI',
+    description: 'EKRILI makes finding and renting homes in Algeria easy and secure',
+    tags: ['REACT', 'NODEJS', 'TAILWIND'],
+    demo: 'https://ekrili21.vercel.app/',
+    github: 'https://github.com/nemo256/ekrili',
     images: [
-      'https://picsum.photos/seed/proj2a/1200/700',
-      'https://picsum.photos/seed/proj2b/1200/700',
-      'https://picsum.photos/seed/proj2c/1200/700',
+      p2_1,
+      p2_2,
     ],
   },
   {
     id: 3,
-    title: 'CIPHER CHAT',
-    description: 'End-to-end encrypted messaging app with ephemeral rooms, file sharing, and zero-knowledge authentication protocols.',
-    tags: ['React', 'WebSockets', 'Redis'],
-    demo: '',     // ← empty = button hidden
-    github: 'https://github.com/example/cipher-chat',
+    title: 'DASHRECOURS',
+    description: 'Modern Website to manage recourse in a university',
+    tags: ['PHP', 'MYSQL'],
+    demo: '',
+    github: 'https://github.com/nemo256/DashRecours',
     images: [
-      'https://picsum.photos/seed/proj3a/1200/700',
-      'https://picsum.photos/seed/proj3b/1200/700',
-      'https://picsum.photos/seed/proj3c/1200/700',
+      p3_1,
+      p3_2,
+      p3_3,
+      p3_4,
+      p3_5,
     ],
   },
   {
     id: 4,
-    title: 'GHOST API',
-    description: 'A high-performance REST & GraphQL gateway with automatic rate limiting, caching layers, and self-documenting schema generation.',
-    tags: ['Node.js', 'GraphQL', 'PostgreSQL'],
-    demo: 'https://example.com/demo4',
-    github: 'https://github.com/example/ghost-api',
+    title: 'HOTEL',
+    description: 'A modern hotel reservation app designed to make booking stays simple and fast',
+    tags: ['NEXTJS', 'REACT', 'NODEJS', 'TAILWIND'],
+    demo: 'https://hotel21.vercel.app/',
+    github: 'https://github.com/nemo256/hotel',
     images: [
-      'https://picsum.photos/seed/proj4a/1200/700',
-      'https://picsum.photos/seed/proj4b/1200/700',
-      'https://picsum.photos/seed/proj4c/1200/700',
+      p4_1,
+      p4_2,
     ],
   },
   {
     id: 5,
-    title: 'MATRIX MONITOR',
-    description: 'DevOps observability suite with custom alerting pipelines, log aggregation, and infrastructure health visualization across cloud providers.',
+    title: 'QAFILATY',
+    description: 'Qafilaty is a smart system for managing and tracking parcels in real time',
     tags: ['React', 'Grafana', 'Docker'],
-    demo: 'https://example.com/demo5',
-    github: 'https://github.com/example/matrix-monitor',
+    demo: 'https://qafilaty-test.vercel.app/',
+    github: 'https://github.com/nemo256/qafilaty-test',
     images: [
-      'https://picsum.photos/seed/proj5a/1200/700',
-      'https://picsum.photos/seed/proj5b/1200/700',
-      'https://picsum.photos/seed/proj5c/1200/700',
+      p5_1,
+      p5_2,
     ],
   },
   {
     id: 6,
-    title: 'ZERO KERNEL',
-    description: 'A lightweight custom Linux kernel module for low-latency network packet filtering. Built for high-throughput server environments.',
-    tags: ['C', 'Linux', 'Networking'],
-    demo: 'https://example.com/demo6',
-    github: 'https://github.com/example/zero-kernel',
+    title: 'ARCHY',
+    description: 'An automatic full arch linux installation script using my setup.',
+    tags: ['LINUX','AUTOMATION', 'BASH', 'C'],
+    demo: '',
+    github: 'https://github.com/nemo256/archy',
     images: [
-      'https://picsum.photos/seed/proj6a/1200/700',
-      'https://picsum.photos/seed/proj6b/1200/700',
-      'https://picsum.photos/seed/proj6c/1200/700',
+      p6_1,
+      p6_2,
+      p6_3,
+      p6_4,
+      p6_5,
+      p6_6,
     ],
   },
 ];
