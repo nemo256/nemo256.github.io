@@ -36,6 +36,11 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  /* Prevent text selection on drag */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html, body, #root {
@@ -50,13 +55,20 @@ body {
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Hide default cursor — replaced by CursorEffect canvas */
-  cursor: none !important;
 }
 
-/* Hide cursor on ALL elements */
-*, *::before, *::after {
-  cursor: none !important;
+/* Hide default cursor on desktop only — cursor canvas handles it */
+@media (hover: hover) and (pointer: fine) {
+  body, *, *::before, *::after {
+    cursor: none !important;
+  }
+}
+
+/* On touch devices — restore normal cursor/touch behaviour */
+@media (hover: none), (pointer: coarse) {
+  body, *, *::before, *::after {
+    cursor: auto !important;
+  }
 }
 
 button {
@@ -72,13 +84,6 @@ a {
 }
 
 /* Scrollbar for internal containers */
-::-webkit-scrollbar {
-  width: 2px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: var(--gray-700);
-  border-radius: 1px;
-}
+::-webkit-scrollbar { width: 2px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--gray-700); border-radius: 1px; }

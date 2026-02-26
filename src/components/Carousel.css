@@ -1,9 +1,13 @@
+/* Carousel — narrower than full width to avoid back-button conflict */
+
 .carousel {
   position: relative;
-  width: 100%;
-  height: 40vh;           /* 40% of viewport height */
+  /* Slightly inset from edges — avoids conflict with back button */
+  width: calc(100% - 80px);
+  margin: 0 auto;
+  height: 40vh;
   overflow: hidden;
-  border-radius: 0 0 20px 20px;
+  border-radius: 0 0 16px 16px;
   background: var(--gray-900);
   flex-shrink: 0;
 }
@@ -24,7 +28,7 @@
   filter: grayscale(30%) contrast(1.05);
 }
 
-/* Full clickable left/right zones — no small buttons */
+/* Full left/right clickable zones */
 .carousel__zone {
   position: absolute;
   top: 0;
@@ -53,12 +57,10 @@
 .carousel__zone--left:hover {
   background: linear-gradient(to right, rgba(0,0,0,0.22), transparent);
 }
-
 .carousel__zone--right:hover {
   background: linear-gradient(to left, rgba(0,0,0,0.22), transparent);
 }
 
-/* Arrow hints — appear only on hover */
 .carousel__zone-hint {
   font-size: 40px;
   color: rgba(255,255,255,0);
@@ -67,15 +69,19 @@
   line-height: 1;
   pointer-events: none;
 }
-
 .carousel__zone:hover .carousel__zone-hint {
   color: rgba(255,255,255,0.55);
+}
+
+/* Also show hints on touch (active state) */
+.carousel__zone:active .carousel__zone-hint {
+  color: rgba(255,255,255,0.45);
 }
 
 /* Dots */
 .carousel__dots {
   position: absolute;
-  bottom: 14px;
+  bottom: 12px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -91,8 +97,32 @@
   border: none;
   transition: background 0.2s ease, transform 0.2s ease;
 }
-
 .carousel__dot.active {
   background: #fff;
   transform: scale(1.3);
+}
+
+/* ══════════════════════════════════════════════
+   TABLET
+   ══════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .carousel {
+    width: calc(100% - 56px);
+    height: 35vh;
+  }
+}
+
+/* ══════════════════════════════════════════════
+   MOBILE
+   ══════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .carousel {
+    width: calc(100% - 32px);
+    height: 30vh;
+    border-radius: 0 0 12px 12px;
+  }
+
+  .carousel__zone-hint { font-size: 28px; }
+  .carousel__zone--left { padding-left: 10px; }
+  .carousel__zone--right { padding-right: 10px; }
 }

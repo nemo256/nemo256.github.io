@@ -1,12 +1,21 @@
-/* CursorEffect.jsx — Bigger cursor, laser beams, click burst animation */
-import { useEffect, useRef } from 'react';
+/* CursorEffect.jsx — Desktop only: laser beams + click burst. Hidden on touch devices. */
+import { useEffect, useRef, useState } from 'react';
 import './CursorEffect.css';
+
+function isTouchDevice() {
+  return window.matchMedia('(hover: none), (pointer: coarse)').matches;
+}
 
 export default function CursorEffect() {
   const canvasRef = useRef(null);
+  const [isTouch] = useState(() => isTouchDevice());
 
   useEffect(() => {
+    // Don't run on touch/mobile devices
+    if (isTouch) return;
+
     const canvas = canvasRef.current;
+    if (!canvas) return;
     const ctx = canvas.getContext('2d');
     let animId;
 
@@ -31,13 +40,10 @@ export default function CursorEffect() {
     };
     window.addEventListener('mousemove', onMove);
 
-    // Click burst — ring + star explosion
-    const onClick = (e) => {
-      spawnClickBurst(e.clientX, e.clientY);
-    };
+    const onClick = (e) => spawnClickBurst(e.clientX, e.clientY);
     window.addEventListener('click', onClick);
 
-    // ── Particles ─────────────────────────────────────
+    // ── Particles ──────────────────────────────────────────
     const particles = [];
     function spawnParticle() {
       const angle = Math.random() * Math.PI * 2;
@@ -53,7 +59,7 @@ export default function CursorEffect() {
       });
     }
 
-    // ── Beams ─────────────────────────────────────────
+    // ── Beams ──────────────────────────────────────────────
     const beams = [];
     function spawnBeam() {
       const dx = mouse.x - mouse.px;
@@ -73,29 +79,25 @@ export default function CursorEffect() {
       }
     }
 
-    // ── Click burst ───────────────────────────────────
+    // ── Click burst ────────────────────────────────────────
     const bursts = [];
     function spawnClickBurst(cx, cy) {
-      // Expanding ring
       bursts.push({ type: 'ring', x: cx, y: cy, r: 0, life: 1, decay: 0.04 });
-      // Star sparks radiating outward
-      const count = 10;
-      for (let i = 0; i < count; i++) {
-        const angle = (i / count) * Math.PI * 2;
+      for (let i = 0; i < 10; i++) {
+        const angle = (i / 10) * Math.PI * 2;
         const speed = Math.random() * 4 + 2;
         bursts.push({
           type: 'spark',
           x: cx, y: cy,
           vx: Math.cos(angle) * speed,
           vy: Math.sin(angle) * speed,
-          life: 1,
-          decay: 0.035,
+          life: 1, decay: 0.035,
           size: Math.random() * 2.5 + 1,
         });
       }
     }
 
-    // ── Helpers ───────────────────────────────────────
+    // ── Helpers ────────────────────────────────────────────
     function drawStar(cx, cy, r, opacity) {
       ctx.save();
       ctx.translate(cx, cy);
@@ -117,46 +119,32 @@ export default function CursorEffect() {
 
     function drawCursor() {
       const x = mouse.x, y = mouse.y;
-
-      // Outer ring — bigger (was 14, now 20)
       ctx.beginPath();
       ctx.arc(x, y, 20, 0, Math.PI * 2);
       ctx.strokeStyle = 'rgba(255,255,255,0.2)';
       ctx.lineWidth = 1;
       ctx.stroke();
-
-      // Mid ring
       ctx.beginPath();
       ctx.arc(x, y, 10, 0, Math.PI * 2);
       ctx.strokeStyle = 'rgba(255,255,255,0.08)';
       ctx.lineWidth = 1;
       ctx.stroke();
-
-      // Inner dot — bigger (was 2.5, now 3.5)
       ctx.beginPath();
       ctx.arc(x, y, 3.5, 0, Math.PI * 2);
       ctx.fillStyle = 'rgba(255,255,255,0.9)';
       ctx.fill();
-
-      // Cross hairs — longer (was 8/4, now 14/6)
       const s = 14, g = 6;
       ctx.strokeStyle = 'rgba(255,255,255,0.3)';
       ctx.lineWidth = 0.8;
-      [
-        [x - s, y, x - g, y],
-        [x + g, y, x + s, y],
-        [x, y - s, x, y - g],
-        [x, y + g, x, y + s],
-      ].forEach(([x1, y1, x2, y2]) => {
-        ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+      [[x-s,y,x-g,y],[x+g,y,x+s,y],[x,y-s,x,y-g],[x,y+g,x,y+s]].forEach(([x1,y1,x2,y2]) => {
+        ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
       });
     }
 
-    // ── Main loop ─────────────────────────────────────
+    // ── Main loop ──────────────────────────────────────────
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Beams
       for (let i = beams.length - 1; i >= 0; i--) {
         const b = beams[i];
         b.life -= b.decay;
@@ -178,7 +166,6 @@ export default function CursorEffect() {
         ctx.shadowBlur = 0;
       }
 
-      // Trail particles
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i];
         p.x += p.vx; p.y += p.vy;
@@ -198,12 +185,10 @@ export default function CursorEffect() {
         }
       }
 
-      // Click bursts
       for (let i = bursts.length - 1; i >= 0; i--) {
         const b = bursts[i];
         b.life -= b.decay;
         if (b.life <= 0) { bursts.splice(i, 1); continue; }
-
         if (b.type === 'ring') {
           b.r += 3.5;
           ctx.beginPath();
@@ -218,9 +203,7 @@ export default function CursorEffect() {
         }
       }
 
-      // Cursor on top
       drawCursor();
-
       animId = requestAnimationFrame(draw);
     };
 
@@ -232,7 +215,10 @@ export default function CursorEffect() {
       window.removeEventListener('mousemove', onMove);
       window.removeEventListener('click', onClick);
     };
-  }, []);
+  }, [isTouch]);
+
+  // Don't render canvas at all on touch devices
+  if (isTouch) return null;
 
   return <canvas ref={canvasRef} className="cursor-canvas" />;
 }

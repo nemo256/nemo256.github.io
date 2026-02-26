@@ -17,7 +17,7 @@
   gap: 20px;
 }
 
-/* Avatar — 250x250, 4px border */
+/* ── Avatar ──────────────────────────────────── */
 .home__avatar {
   cursor: none;
 }
@@ -45,7 +45,7 @@
   display: block;
 }
 
-/* Title */
+/* ── Title ───────────────────────────────────── */
 .home__title {
   font-family: var(--font-display);
   font-size: clamp(36px, 6vw, 88px);
@@ -61,7 +61,7 @@
   display: block;
 }
 
-/* Subtitle */
+/* ── Subtitle ────────────────────────────────── */
 .home__subtitle {
   font-family: var(--font-mono);
   font-size: 13px;
@@ -70,7 +70,7 @@
   text-transform: uppercase;
 }
 
-/* Pills */
+/* ── Pills ───────────────────────────────────── */
 .home__pills {
   display: flex;
   gap: 10px;
@@ -93,7 +93,7 @@
   transition: background 0.2s ease;
 }
 
-/* Email footer */
+/* ── Email footer ────────────────────────────── */
 .home__email {
   position: absolute;
   bottom: 32px;
@@ -121,4 +121,86 @@
   align-items: center;
   gap: 5px;
   color: var(--gray-400);
+}
+
+/* ══════════════════════════════════════════════
+   TABLET  (≤ 900px)
+   ══════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .home__content {
+    gap: 16px;
+  }
+
+  .home__avatar-ring {
+    width: 180px;
+    height: 180px;
+    border-width: 3px;
+  }
+
+  .home__title {
+    font-size: clamp(30px, 7vw, 60px);
+    letter-spacing: 2px;
+  }
+
+  .home__subtitle {
+    font-size: 11px;
+    letter-spacing: 6px;
+  }
+
+  .pill {
+    padding: 8px 16px;
+    font-size: 10px;
+    letter-spacing: 2px;
+  }
+
+  .home__email {
+    font-size: 10px;
+    letter-spacing: 1px;
+    bottom: 24px;
+  }
+}
+
+/* ══════════════════════════════════════════════
+   MOBILE  (≤ 480px)
+   ══════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .home__content {
+    gap: 12px;
+    padding: 0 20px;
+  }
+
+  /* Much smaller avatar on phone */
+  .home__avatar-ring {
+    width: 110px;
+    height: 110px;
+    border-width: 2px;
+  }
+
+  .home__title {
+    font-size: clamp(28px, 9vw, 48px);
+    letter-spacing: 1px;
+  }
+
+  .home__subtitle {
+    font-size: 9px;
+    letter-spacing: 4px;
+  }
+
+  .home__pills {
+    gap: 7px;
+  }
+
+  .pill {
+    padding: 7px 13px;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+  }
+
+  .home__email {
+    font-size: 9px;
+    letter-spacing: 0.5px;
+    bottom: 20px;
+    padding: 0 16px;
+    text-align: center;
+  }
 }

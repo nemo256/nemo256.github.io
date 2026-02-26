@@ -15,7 +15,7 @@
   pointer-events: all;
 }
 
-/* ── Initials ─────────────────────────────────────── */
+/* ── Initials ─────────────────────────────────── */
 .topnav__initials {
   display: flex;
   align-items: baseline;
@@ -26,7 +26,6 @@
   position: relative;
 }
 
-/* Each letter individually styled */
 .topnav__initials-l,
 .topnav__initials-n {
   display: inline-block;
@@ -36,21 +35,19 @@
   color: #fff;
 }
 
-/* Separator dot between letters */
-/* .topnav__initials::after { */
-/*   content: ''; */
-/*   position: absolute; */
-/*   bottom: 6px; */
-/*   left: 50%; */
-/*   transform: translateX(-50%); */
-/*   width: 4px; */
-/*   height: 4px; */
-/*   border-radius: 50%; */
-/*   background: var(--gray-600); */
-/*   transition: background 0.25s ease; */
-/* } */
+.topnav__initials::after {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--gray-600);
+  transition: background 0.25s ease;
+}
 
-/* Hover — letters shift apart, dot brightens */
 .topnav__initials:hover .topnav__initials-l {
   transform: translateX(-3px);
   color: #fff;
@@ -63,7 +60,6 @@
   background: #fff;
 }
 
-/* Underline accent */
 .topnav__initials::before {
   content: '';
   position: absolute;
@@ -76,12 +72,11 @@
   transform-origin: left;
   transition: transform 0.35s ease;
 }
-
 .topnav__initials:hover::before {
   transform: scaleX(1);
 }
 
-/* ── Back icon ────────────────────────────────────── */
+/* ── Back icon ────────────────────────────────── */
 .topnav__back {
   display: flex;
   align-items: center;
@@ -90,12 +85,9 @@
   transition: color var(--transition-fast);
   padding: 4px;
 }
+.topnav__back:hover { color: #fff; }
 
-.topnav__back:hover {
-  color: #fff;
-}
-
-/* ── Projects icon ───────────────────────────────── */
+/* ── Projects icon ───────────────────────────── */
 .topnav__projects {
   color: var(--gray-500);
   transition: color var(--transition-fast);
@@ -104,7 +96,31 @@
   justify-content: center;
   padding: 4px;
 }
+.topnav__projects:hover { color: #fff; }
 
-.topnav__projects:hover {
-  color: #fff;
+/* ── Tablet ───────────────────────────────────── */
+@media (max-width: 900px) {
+  .topnav {
+    padding: 20px 28px;
+  }
+  .topnav__initials-l,
+  .topnav__initials-n {
+    font-size: 30px;
+  }
+}
+
+/* ── Mobile ───────────────────────────────────── */
+@media (max-width: 480px) {
+  .topnav {
+    padding: 16px 20px;
+  }
+  .topnav__initials-l,
+  .topnav__initials-n {
+    font-size: 26px;
+  }
+  .topnav__initials::after {
+    bottom: 4px;
+    width: 3px;
+    height: 3px;
+  }
 }
