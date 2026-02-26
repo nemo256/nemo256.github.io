@@ -83,7 +83,13 @@ export default function ProjectDetail({ project, onNavigate }) {
 
         <motion.div className="detail__tags" variants={fadeUp}>
           {project.tags.map((t) => (
-            <span key={t} className="detail__tag">{t}</span>
+            <motion.span
+              key={t}
+              className="detail__tag"
+              whileHover={{ scale: 1.06, backgroundColor: '#2a2a2a' }}
+              whileTap={{ scale: 0.96, backgroundColor: '#2a2a2a' }}
+              transition={{ duration: 0.18 }}
+            >{t}</motion.span>
           ))}
         </motion.div>
 

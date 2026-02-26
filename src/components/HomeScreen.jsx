@@ -38,7 +38,7 @@ export default function HomeScreen() {
       <motion.div className="home__content" variants={container} initial="hidden" animate="show">
 
         {/* Memoji */}
-        <motion.div className="home__avatar" variants={item} whileHover="hover">
+        <motion.div className="home__avatar" variants={item} whileHover="hover" whileTap="hover">
           <motion.div
             className="home__avatar-ring"
             variants={{ hover: { scale: 1.06, borderColor: 'rgba(255,255,255,0.5)' } }}
@@ -72,7 +72,8 @@ export default function HomeScreen() {
               key={label}
               className="pill"
               whileHover={{ scale: 1.06, backgroundColor: '#2a2a2a' }}
-              transition={{ duration: 0.2 }}
+              whileTap={{ scale: 0.96, backgroundColor: '#2a2a2a' }}
+              transition={{ duration: 0.18 }}
             >
               {label}
             </motion.span>
