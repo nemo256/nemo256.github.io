@@ -1,4 +1,4 @@
-/* ProjectDetail.jsx — Carousel stuck to top, centered info, conditional links */
+/* ProjectDetail.jsx — Carousel top, content middle, nav pinned bottom */
 import { motion } from 'framer-motion';
 import { ExternalLink, Github, ChevronLeft, ChevronRight } from 'lucide-react';
 import Carousel from './Carousel.jsx';
@@ -65,12 +65,12 @@ export default function ProjectDetail({ project, onNavigate }) {
       animate="show"
       exit="exit"
     >
-      {/* ── Carousel — sticks to top, inset width, rounded bottom corners ── */}
+      {/* ── ZONE 1: Carousel — always at top ──────────────────── */}
       <div className="detail__carousel-wrap">
         <Carousel images={project.images} />
       </div>
 
-      {/* ── Centered content ─────────────────────────────────────────────── */}
+      {/* ── ZONE 2: Info — scrollable if needed, fills space between carousel and nav ── */}
       <motion.div
         className="detail__content"
         variants={stagger}
@@ -91,25 +91,29 @@ export default function ProjectDetail({ project, onNavigate }) {
           {project.description}
         </motion.p>
 
-        {/* Only render links row if at least one link exists */}
         {hasLinks && (
           <motion.div className="detail__links" variants={fadeUp}>
             <PillLink href={project.demo}   icon={ExternalLink} label="LIVE DEMO" />
             <PillLink href={project.github} icon={Github}       label="GITHUB"    />
           </motion.div>
         )}
+      </motion.div>
 
-        {/* Prev / Next */}
-        <motion.div className="detail__nav" variants={fadeUp}>
-          <button className="detail__nav-btn" onClick={() => onNavigate(prevProject)}>
-            <ChevronLeft size={16} strokeWidth={1.5} />
-            <span>{prevProject.title}</span>
-          </button>
-          <button className="detail__nav-btn detail__nav-btn--next" onClick={() => onNavigate(nextProject)}>
-            <span>{nextProject.title}</span>
-            <ChevronRight size={16} strokeWidth={1.5} />
-          </button>
-        </motion.div>
+      {/* ── ZONE 3: Prev/Next — always pinned to bottom ──────── */}
+      <motion.div
+        className="detail__nav"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <button className="detail__nav-btn" onClick={() => onNavigate(prevProject)}>
+          <ChevronLeft size={16} strokeWidth={1.5} />
+          <span>{prevProject.title}</span>
+        </button>
+        <button className="detail__nav-btn detail__nav-btn--next" onClick={() => onNavigate(nextProject)}>
+          <span>{nextProject.title}</span>
+          <ChevronRight size={16} strokeWidth={1.5} />
+        </button>
       </motion.div>
     </motion.div>
   );

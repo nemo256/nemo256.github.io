@@ -22,14 +22,6 @@
   --transition-fast: 0.2s ease;
   --transition-mid: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   --transition-slow: 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-
-  /* Safe full-screen height that accounts for mobile browser chrome */
-  --app-h: 100vh;
-}
-
-/* Use dvh (dynamic viewport height) where supported — crucial for mobile */
-@supports (height: 100dvh) {
-  :root { --app-h: 100dvh; }
 }
 
 @media (prefers-color-scheme: light) {
@@ -48,34 +40,26 @@
   -moz-user-select: none;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
-  /* Prevent overscroll bounce on iOS */
-  -webkit-overflow-scrolling: touch;
 }
 
-html {
+html, body, #root {
   width: 100%;
-  height: 100%;
-  /* Lock the root so the browser chrome never triggers a page scroll */
+  /* dvh accounts for mobile browser chrome (address bar) shrinking */
+  height: 100dvh;
   overflow: hidden;
-  overscroll-behavior: none;
+}
+
+/* Fallback for browsers without dvh support */
+@supports not (height: 100dvh) {
+  html, body, #root { height: 100vh; }
 }
 
 body {
-  width: 100%;
-  height: var(--app-h);
-  overflow: hidden;
-  overscroll-behavior: none;
   background-color: var(--bg);
   color: var(--text);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-#root {
-  width: 100%;
-  height: var(--app-h);
-  overflow: hidden;
 }
 
 /* Desktop: hide system cursor — canvas draws its own */

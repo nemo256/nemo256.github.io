@@ -5,11 +5,17 @@
   /* Slightly inset from edges — avoids conflict with back button */
   width: calc(100% - 80px);
   margin: 0 auto;
-  height: 40vh;
+  /* Use svh (smallest viewport height) so carousel doesn't overflow when
+     the mobile browser chrome is visible. Falls back to 40vh. */
+  height: 40svh;
   overflow: hidden;
   border-radius: 0 0 16px 16px;
   background: var(--gray-900);
   flex-shrink: 0;
+}
+
+@supports not (height: 40svh) {
+  .carousel { height: 40vh; }
 }
 
 .carousel__track {
@@ -108,8 +114,12 @@
 @media (max-width: 900px) {
   .carousel {
     width: calc(100% - 56px);
-    height: 35vh;
+    height: 35svh;
   }
+}
+
+@supports not (height: 35svh) {
+  @media (max-width: 900px) { .carousel { height: 35vh; } }
 }
 
 /* ══════════════════════════════════════════════
@@ -118,11 +128,24 @@
 @media (max-width: 480px) {
   .carousel {
     width: calc(100% - 32px);
-    height: 30vh;
+    height: 32svh;
     border-radius: 0 0 12px 12px;
   }
 
   .carousel__zone-hint { font-size: 28px; }
   .carousel__zone--left { padding-left: 10px; }
   .carousel__zone--right { padding-right: 10px; }
+}
+
+@supports not (height: 32svh) {
+  @media (max-width: 480px) { .carousel { height: 30vh; } }
+}
+
+/* ══════════════════════════════════════════════
+   SHORT SCREENS — landscape phone
+   ══════════════════════════════════════════════ */
+@media (max-height: 500px) {
+  .carousel {
+    height: 52svh;
+  }
 }

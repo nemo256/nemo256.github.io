@@ -80,6 +80,13 @@ export default function HomeScreen() {
         </motion.div>
       </motion.div>
 
+      {/* Tap hint — mobile only, CSS hides it on desktop */}
+      <div className="home__tap-hint" aria-hidden="true">
+        <span className="home__tap-hint-dot" />
+        <span className="home__tap-hint-dot" />
+        <span className="home__tap-hint-dot" />
+      </div>
+
       {/* Footer email — clipboard only, no mailto */}
       <motion.button
         className="home__email"
