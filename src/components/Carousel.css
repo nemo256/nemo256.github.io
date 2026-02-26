@@ -1,13 +1,14 @@
-/* Carousel — narrower than full width to avoid back-button conflict */
+/* Carousel — inset width, glued to top, rounded bottom corners only */
 
 .carousel {
   position: relative;
-  /* Slightly inset from edges — avoids conflict with back button */
-  width: calc(100% - 80px);
+  /* Narrower than full width — back button won't conflict with left zone */
+  width: calc(100% - 120px);
   margin: 0 auto;
-  height: 40vh;
+  height: 38vh;
   overflow: hidden;
-  border-radius: 0 0 16px 16px;
+  /* Rounded bottom corners only — top is flush with screen edge */
+  border-radius: 0 0 20px 20px;
   background: var(--gray-900);
   flex-shrink: 0;
 }
@@ -28,7 +29,7 @@
   filter: grayscale(30%) contrast(1.05);
 }
 
-/* Full left/right clickable zones */
+/* ── Full left / right clickable zones ──────────────────── */
 .carousel__zone {
   position: absolute;
   top: 0;
@@ -61,6 +62,14 @@
   background: linear-gradient(to left, rgba(0,0,0,0.22), transparent);
 }
 
+/* Touch active state */
+.carousel__zone--left:active {
+  background: linear-gradient(to right, rgba(0,0,0,0.18), transparent);
+}
+.carousel__zone--right:active {
+  background: linear-gradient(to left, rgba(0,0,0,0.18), transparent);
+}
+
 .carousel__zone-hint {
   font-size: 40px;
   color: rgba(255,255,255,0);
@@ -69,16 +78,12 @@
   line-height: 1;
   pointer-events: none;
 }
-.carousel__zone:hover .carousel__zone-hint {
-  color: rgba(255,255,255,0.55);
-}
-
-/* Also show hints on touch (active state) */
+.carousel__zone:hover .carousel__zone-hint,
 .carousel__zone:active .carousel__zone-hint {
-  color: rgba(255,255,255,0.45);
+  color: rgba(255,255,255,0.5);
 }
 
-/* Dots */
+/* ── Dots ────────────────────────────────────────────────── */
 .carousel__dots {
   position: absolute;
   bottom: 12px;
@@ -103,26 +108,26 @@
 }
 
 /* ══════════════════════════════════════════════
-   TABLET
+   TABLET  (≤ 900px)
    ══════════════════════════════════════════════ */
 @media (max-width: 900px) {
   .carousel {
-    width: calc(100% - 56px);
-    height: 35vh;
+    width: calc(100% - 80px);
+    height: 34vh;
+    border-radius: 0 0 16px 16px;
   }
 }
 
 /* ══════════════════════════════════════════════
-   MOBILE
+   MOBILE  (≤ 480px)
    ══════════════════════════════════════════════ */
 @media (max-width: 480px) {
   .carousel {
-    width: calc(100% - 32px);
-    height: 30vh;
+    width: calc(100% - 40px);
+    height: 28vh;
     border-radius: 0 0 12px 12px;
   }
-
   .carousel__zone-hint { font-size: 28px; }
-  .carousel__zone--left { padding-left: 10px; }
+  .carousel__zone--left  { padding-left: 10px; }
   .carousel__zone--right { padding-right: 10px; }
 }

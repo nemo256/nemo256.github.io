@@ -1,4 +1,4 @@
-/* ProjectDetail.jsx — Centered, icon-only links that expand to pills on hover */
+/* ProjectDetail.jsx — Carousel stuck to top, centered info, conditional links */
 import { motion } from 'framer-motion';
 import { ExternalLink, Github, ChevronLeft, ChevronRight } from 'lucide-react';
 import Carousel from './Carousel.jsx';
@@ -7,22 +7,23 @@ import './ProjectDetail.css';
 
 const pageVariants = {
   hidden: { opacity: 0, scale: 0.97, y: 20 },
-  show: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] } },
-  exit: { opacity: 0, scale: 0.97, y: -20, transition: { duration: 0.35 } },
+  show:  { opacity: 1, scale: 1,    y: 0,  transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] } },
+  exit:  { opacity: 0, scale: 0.97, y: -20, transition: { duration: 0.35 } },
 };
 
 const stagger = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.07, delayChildren: 0.1 } }
+  show: { transition: { staggerChildren: 0.07, delayChildren: 0.1 } },
 };
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } }
+  show:   { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
 };
 
-/* Expanding pill link component */
+/* Expanding pill link — only rendered when href is non-empty */
 function PillLink({ href, icon: Icon, label }) {
+  if (!href) return null;
   return (
     <motion.a
       href={href}
@@ -38,7 +39,7 @@ function PillLink({ href, icon: Icon, label }) {
       <motion.span
         className="detail__pill-label"
         variants={{
-          rest: { width: 0, opacity: 0, marginLeft: 0 },
+          rest:  { width: 0,      opacity: 0, marginLeft: 0 },
           hover: { width: 'auto', opacity: 1, marginLeft: 8 },
         }}
         transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
@@ -51,8 +52,10 @@ function PillLink({ href, icon: Icon, label }) {
 
 export default function ProjectDetail({ project, onNavigate }) {
   const currentIndex = projects.findIndex((p) => p.id === project.id);
-  const prevProject = projects[(currentIndex - 1 + projects.length) % projects.length];
-  const nextProject = projects[(currentIndex + 1) % projects.length];
+  const prevProject  = projects[(currentIndex - 1 + projects.length) % projects.length];
+  const nextProject  = projects[(currentIndex + 1)                   % projects.length];
+
+  const hasLinks = project.demo || project.github;
 
   return (
     <motion.div
@@ -62,12 +65,12 @@ export default function ProjectDetail({ project, onNavigate }) {
       animate="show"
       exit="exit"
     >
-      {/* Carousel — 40vh full width */}
+      {/* ── Carousel — sticks to top, inset width, rounded bottom corners ── */}
       <div className="detail__carousel-wrap">
         <Carousel images={project.images} />
       </div>
 
-      {/* Centered content */}
+      {/* ── Centered content ─────────────────────────────────────────────── */}
       <motion.div
         className="detail__content"
         variants={stagger}
@@ -88,11 +91,13 @@ export default function ProjectDetail({ project, onNavigate }) {
           {project.description}
         </motion.p>
 
-        {/* Icon links — expand to pill on hover */}
-        <motion.div className="detail__links" variants={fadeUp}>
-          <PillLink href={project.demo} icon={ExternalLink} label="LIVE DEMO" />
-          <PillLink href={project.github} icon={Github} label="GITHUB" />
-        </motion.div>
+        {/* Only render links row if at least one link exists */}
+        {hasLinks && (
+          <motion.div className="detail__links" variants={fadeUp}>
+            <PillLink href={project.demo}   icon={ExternalLink} label="LIVE DEMO" />
+            <PillLink href={project.github} icon={Github}       label="GITHUB"    />
+          </motion.div>
+        )}
 
         {/* Prev / Next */}
         <motion.div className="detail__nav" variants={fadeUp}>

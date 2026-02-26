@@ -1,4 +1,4 @@
-/* ProjectDetail — centered layout, no scroll on desktop, scrollable on mobile */
+/* ProjectDetail — carousel glued to top, centered info below */
 
 .detail {
   position: relative;
@@ -10,14 +10,14 @@
   overflow: hidden;
 }
 
+/* ── Carousel wrap — sticks to very top, NO padding-top ──────── */
 .detail__carousel-wrap {
   width: 100%;
   flex-shrink: 0;
-  /* Push carousel down so back button (fixed, ~72px) doesn't overlap it */
-  padding-top: 72px;
+  /* No padding — carousel starts at top edge, back button floats over it */
 }
 
-/* Content — centered, no scroll on desktop */
+/* ── Content — fills remaining space, vertically centered ─────── */
 .detail__content {
   flex: 1;
   overflow: hidden;
@@ -42,7 +42,7 @@
 /* Tags */
 .detail__tags {
   display: flex;
-  gap: 8px;
+  gap: 16px;
   flex-wrap: wrap;
   justify-content: center;
 }
@@ -69,7 +69,7 @@
   max-width: 520px;
 }
 
-/* ── Expanding pill links ──────────────────────── */
+/* ── Expanding pill links ──────────────────────────────────────── */
 .detail__links {
   display: flex;
   gap: 14px;
@@ -108,7 +108,7 @@
   display: inline-block;
 }
 
-/* ── Prev / Next ──────────────────────────────── */
+/* ── Prev / Next ──────────────────────────────────────────────── */
 .detail__nav {
   display: flex;
   justify-content: space-between;
@@ -135,39 +135,27 @@
 .detail__nav-btn:hover { color: #fff; }
 .detail__nav-btn--next { flex-direction: row-reverse; }
 
-/* ══════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════
    TABLET  (≤ 900px)
-   ══════════════════════════════════════════════ */
+   ══════════════════════════════════════════════════════════ */
 @media (max-width: 900px) {
-  .detail__carousel-wrap {
-    padding-top: 64px;
-  }
-
   .detail__content {
     gap: 14px;
     padding: 16px 32px;
   }
-
   .detail__title {
     font-size: clamp(24px, 5vw, 48px);
     letter-spacing: 2px;
   }
-
   .detail__desc { font-size: 12px; }
 }
 
-/* ══════════════════════════════════════════════
-   MOBILE  (≤ 480px) — allow scroll, compact
-   ══════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════
+   MOBILE  (≤ 480px)
+   ══════════════════════════════════════════════════════════ */
 @media (max-width: 480px) {
-  .detail {
-    overflow-y: auto;   /* allow scroll on small phones if content overflows */
-    height: 100vh;
-  }
-
-  .detail__carousel-wrap {
-    padding-top: 58px;
-  }
+  /* Allow scroll if content overflows on very small screens */
+  .detail { overflow-y: auto; }
 
   .detail__content {
     flex: unset;
@@ -178,7 +166,7 @@
   }
 
   .detail__title {
-    font-size: clamp(22px, 7vw, 38px);
+    font-size: clamp(22px, 7vw, 36px);
     letter-spacing: 2px;
   }
 
@@ -192,11 +180,7 @@
     padding: 5px 12px;
   }
 
-  /* On mobile: links are always expanded (no hover) */
-  .detail__pill-link {
-    height: 40px;
-    padding: 0 14px;
-  }
+  .detail__pill-link { height: 40px; padding: 0 14px; }
 
   .detail__nav {
     max-width: 100%;
