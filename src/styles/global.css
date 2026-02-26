@@ -22,6 +22,14 @@
   --transition-fast: 0.2s ease;
   --transition-mid: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   --transition-slow: 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Safe full-screen height that accounts for mobile browser chrome */
+  --app-h: 100vh;
+}
+
+/* Use dvh (dynamic viewport height) where supported — crucial for mobile */
+@supports (height: 100dvh) {
+  :root { --app-h: 100dvh; }
 }
 
 @media (prefers-color-scheme: light) {
@@ -36,20 +44,27 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  /* Prevent text selection on drag */
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+  /* Prevent overscroll bounce on iOS */
+  -webkit-overflow-scrolling: touch;
 }
 
-html, body, #root {
+html {
   width: 100%;
   height: 100%;
+  /* Lock the root so the browser chrome never triggers a page scroll */
   overflow: hidden;
+  overscroll-behavior: none;
 }
 
 body {
+  width: 100%;
+  height: var(--app-h);
+  overflow: hidden;
+  overscroll-behavior: none;
   background-color: var(--bg);
   color: var(--text);
   font-family: var(--font-body);
@@ -57,18 +72,20 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Hide default cursor on desktop only — cursor canvas handles it */
-@media (hover: hover) and (pointer: fine) {
-  body, *, *::before, *::after {
-    cursor: none !important;
-  }
+#root {
+  width: 100%;
+  height: var(--app-h);
+  overflow: hidden;
 }
 
-/* On touch devices — restore normal cursor/touch behaviour */
+/* Desktop: hide system cursor — canvas draws its own */
+@media (hover: hover) and (pointer: fine) {
+  body, *, *::before, *::after { cursor: none !important; }
+}
+
+/* Touch devices: restore auto cursor */
 @media (hover: none), (pointer: coarse) {
-  body, *, *::before, *::after {
-    cursor: auto !important;
-  }
+  body, *, *::before, *::after { cursor: auto !important; }
 }
 
 button {
@@ -83,7 +100,6 @@ a {
   text-decoration: none;
 }
 
-/* Scrollbar for internal containers */
 ::-webkit-scrollbar { width: 2px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--gray-700); border-radius: 1px; }
