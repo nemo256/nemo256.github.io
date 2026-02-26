@@ -1,0 +1,98 @@
+.loader {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader__bar-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.loader__bar-fill {
+  height: 100%;
+  background: #fff;
+  transition: width 0.4s ease;
+}
+
+.loader__center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.loader__glitch {
+  font-family: var(--font-display);
+  font-size: 96px;
+  letter-spacing: 8px;
+  color: #fff;
+  animation: glitch 1.5s infinite;
+  position: relative;
+}
+
+.loader__glitch::before,
+.loader__glitch::after {
+  content: 'LN';
+  position: absolute;
+  inset: 0;
+  font-family: var(--font-display);
+}
+
+.loader__glitch::before {
+  color: rgba(255, 255, 255, 0.3);
+  animation: glitch-before 1.5s infinite;
+  clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+}
+
+.loader__glitch::after {
+  color: rgba(255, 255, 255, 0.2);
+  animation: glitch-after 1.5s infinite;
+  clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+}
+
+@keyframes glitch {
+  0%, 90%, 100% { transform: translate(0); }
+  91% { transform: translate(-2px, 1px); }
+  93% { transform: translate(2px, -1px); }
+  95% { transform: translate(-1px, 2px); }
+}
+
+@keyframes glitch-before {
+  0%, 90%, 100% { transform: translate(0); }
+  92% { transform: translate(3px, 0); }
+  94% { transform: translate(-2px, 0); }
+}
+
+@keyframes glitch-after {
+  0%, 90%, 100% { transform: translate(0); }
+  91% { transform: translate(-3px, 1px); }
+  93% { transform: translate(2px, -1px); }
+}
+
+.loader__label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 6px;
+  color: var(--gray-500);
+}
+
+.loader__percentage {
+  position: absolute;
+  bottom: 32px;
+  right: 32px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gray-600);
+  letter-spacing: 2px;
+}
