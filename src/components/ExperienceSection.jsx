@@ -4,13 +4,14 @@ import { motion, useInView } from 'framer-motion';
 import './ExperienceSection.css';
 
 const ITEMS = [
-  { type: 'work', period: '2023 — NOW',  role: 'Freelance Full-Stack Developer', org: 'Self-Employed',               desc: 'Custom web apps for clients across Algeria and internationally — e-commerce, dashboards, automation.' },
-  { type: 'work', period: '2022 — 2023', role: 'Junior Web Developer',           org: 'Nexatech Solutions · Algiers', desc: 'Shipped client-facing features, introduced component-driven architecture that cut UI dev time by 35%.' },
-  { type: 'work', period: '2021 — 2022', role: 'Front-End Developer Intern',     org: 'DigitLab Agency · Algiers',   desc: 'Built responsive landing pages and contributed to a React component library.' },
-  { type: 'cert', period: '2023',        role: 'Meta Front-End Developer Certificate', org: 'Meta / Coursera',      desc: '9-course professional program covering React, accessibility, and UI/UX principles.' },
-  { type: 'cert', period: '2022',        role: 'Node.js Application Development (LFW211)', org: 'Linux Foundation', desc: 'Node.js internals, streams, REST APIs, and security best practices.' },
-  { type: 'edu',  period: '2020 — 2022', role: "Master's in Computer Science",   org: 'ESI · Algiers',              desc: 'Specialized in Distributed Systems. Thesis on microservice orchestration. Graduated with distinction.' },
-  { type: 'edu',  period: '2017 — 2020', role: "Bachelor's in Computer Science", org: 'USTHB · Algiers',            desc: 'Algorithms, data structures, databases, and operating systems.' },
+  { type: 'work', period: '2024 — NOW',  role: 'Full-Stack Developer', org: 'SONATRACH · Algier', desc: 'Building and maintaining internal web applications and systems.' },
+  { type: 'work', period: '2023 — 2024', role: 'Front-End Developer',  org: 'EKRILI · Algiers', desc: 'Developing and enhancing the startup’s web interface, focusing on responsive design, performance, and user experience.' },
+  { type: 'work', period: '2022 — 2023', role: 'Part-Time Professor',  org: 'University of Boumerdes · Boumerdes',   desc: 'Teaching and supporting students with course materials, assignments, and academic guidance.' },
+  { type: 'cert', period: '2025',        role: 'CEH (Certified Ethical Hacker) Certificate', org: 'SONATRACH MANAGEMENT ACADEMY', desc: 'Certified in ethical hacking fundamentals, penetration testing, and cybersecurity best practices.' },
+  { type: 'cert', period: '2024',        role: 'Project Management Certificate', org: 'SONATRACH MANAGEMENT ACADEMY · ORAN', desc: 'Learned project planning, team collaboration, and project delivery using Agile and Scrum practices.' },
+  { type: 'cert',  period: '2024',       role: "Microsoft Configuration Manager (SCCM) Certificate",   org: 'SONATRACH MANAGEMENT ACADEMY · ORAN', desc: 'Trained in system deployment, configuration management, and enterprise infrastructure administration.' },
+  { type: 'edu',  period: '2020 — 2022', role: "Master's in Information Technology", org: 'University of Boumerdes · Boumerdes',        desc: 'Studied software development, databases, and computer systems fundamentals.' },
+  { type: 'edu',  period: '2017 — 2020', role: "Bachelor's in Information Systems", org: 'University of Boumerdes · Boumerde',          desc: 'Algorithms, data structures, databases, and operating systems.' },
 ];
 
 const TYPE_LABEL = { work: 'EXPERIENCE', cert: 'FORMATION', edu: 'EDUCATION' };
