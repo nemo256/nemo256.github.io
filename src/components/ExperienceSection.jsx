@@ -1,4 +1,4 @@
-/* ExperienceSection.jsx */
+/* ExperienceSection.jsx — each entry reveals individually on scroll */
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import './ExperienceSection.css';
@@ -43,63 +43,74 @@ const ITEMS = [
     type: 'edu',
     period: '2020 — 2022',
     role: "Master's in Computer Science",
-    org: "ESI · Algiers",
+    org: 'ESI · Algiers',
     desc: 'Specialized in Distributed Systems. Thesis on microservice orchestration. Graduated with distinction.',
   },
   {
     type: 'edu',
     period: '2017 — 2020',
     role: "Bachelor's in Computer Science",
-    org: "USTHB · Algiers",
+    org: 'USTHB · Algiers',
     desc: 'Algorithms, data structures, databases, and operating systems.',
   },
 ];
 
 const TYPE_LABEL = { work: 'EXPERIENCE', cert: 'FORMATION', edu: 'EDUCATION' };
 
-const item = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
-};
+/* Each entry watches its own intersection */
+function ExpEntry({ entry, index }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-15% 0px -15% 0px' });
+
+  return (
+    <motion.div
+      ref={ref}
+      className={`exp__entry exp__entry--${entry.type}`}
+      initial={{ opacity: 0, y: 48 }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 48 }}
+      transition={{ duration: 0.72, ease: [0.16, 1, 0.3, 1] }}
+    >
+      <div className="exp__entry-left">
+        <span className="exp__type">{TYPE_LABEL[entry.type]}</span>
+        <span className="exp__period">{entry.period}</span>
+      </div>
+      <div className="exp__entry-line">
+        <span className="exp__dot" />
+      </div>
+      <div className="exp__entry-right">
+        <h3 className="exp__role">{entry.role}</h3>
+        <span className="exp__org">{entry.org}</span>
+        <p className="exp__desc">{entry.desc}</p>
+      </div>
+    </motion.div>
+  );
+}
 
 export default function ExperienceSection() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-80px' });
+  const headerRef = useRef(null);
+  const headerInView = useInView(headerRef, { once: true, margin: '-80px' });
 
   return (
     <div className="exp">
-      <div className="exp__header">
+      <motion.div
+        ref={headerRef}
+        className="exp__header"
+        initial={{ opacity: 0, y: 30 }}
+        animate={headerInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      >
         <span className="section-label">EXPERIENCE &amp; EDUCATION</span>
         <h2 className="exp__heading">
           CAREER &amp;<br />
           <span className="exp__heading-accent">EDUCATION</span>
         </h2>
-      </div>
-
-      <motion.div
-        ref={ref}
-        className="exp__list"
-        initial="hidden"
-        animate={inView ? 'show' : 'hidden'}
-        variants={{ show: { transition: { staggerChildren: 0.09 } } }}
-      >
-        {ITEMS.map((entry, i) => (
-          <motion.div key={i} className={`exp__entry exp__entry--${entry.type}`} variants={item}>
-            <div className="exp__entry-left">
-              <span className="exp__type">{TYPE_LABEL[entry.type]}</span>
-              <span className="exp__period">{entry.period}</span>
-            </div>
-            <div className="exp__entry-line">
-              <span className="exp__dot" />
-            </div>
-            <div className="exp__entry-right">
-              <h3 className="exp__role">{entry.role}</h3>
-              <span className="exp__org">{entry.org}</span>
-              <p className="exp__desc">{entry.desc}</p>
-            </div>
-          </motion.div>
-        ))}
       </motion.div>
+
+      <div className="exp__list">
+        {ITEMS.map((entry, i) => (
+          <ExpEntry key={i} entry={entry} index={i} />
+        ))}
+      </div>
     </div>
   );
 }

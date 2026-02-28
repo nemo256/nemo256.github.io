@@ -8,9 +8,19 @@
 }
 
 .about__inner {
-  max-width: 900px;
+  max-width: 1100px;
   width: 100%;
-  text-align: center;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 64px;
+  align-items: center;
+}
+
+/* ── Left ── */
+.about__left {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
 .section-label {
@@ -21,38 +31,84 @@
   letter-spacing: 5px;
   color: var(--gray-600);
   text-transform: uppercase;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 }
 
 .about__heading {
   font-family: var(--font-display);
-  font-size: clamp(60px, 11vw, 140px);
+  font-size: clamp(52px, 9vw, 120px);
   font-weight: 400;
   line-height: 1;
-  letter-spacing: 4px;
+  letter-spacing: 3px;
   color: var(--gray-700);
   text-transform: uppercase;
-  margin-bottom: 36px;
+  margin-bottom: 32px;
 }
 
 .about__heading-accent { color: #fff; }
 
 .about__body {
   font-family: var(--font-body);
-  font-size: clamp(16px, 2vw, 22px);
+  font-size: clamp(15px, 1.6vw, 19px);
   font-weight: 600;
   color: var(--gray-400);
-  line-height: 1.7;
-  max-width: 600px;
-  margin: 0 auto;
+  line-height: 1.75;
+  max-width: 500px;
 }
 
+/* ── Right — stats ── */
+.about__stats {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+.astat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.astat__number {
+  font-family: var(--font-display);
+  font-size: clamp(44px, 6vw, 72px);
+  line-height: 1;
+  color: #fff;
+  letter-spacing: 2px;
+}
+
+.astat__label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--gray-600);
+  text-transform: uppercase;
+}
+
+/* Tablet — stack vertically */
 @media (max-width: 900px) {
+  .about__inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .about__stats {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 32px;
+  }
+  .astat { align-items: flex-start; }
   .about__heading { letter-spacing: 2px; }
 }
 
+/* Mobile */
 @media (max-width: 480px) {
   .about { padding: 64px 20px; }
-  .about__heading { font-size: clamp(48px, 15vw, 80px); letter-spacing: 1px; margin-bottom: 24px; }
-  .about__body { font-size: 15px; }
+  .about__heading { font-size: clamp(44px, 14vw, 76px); letter-spacing: 1px; margin-bottom: 22px; }
+  .about__body { font-size: 14px; }
+  .about__stats { gap: 24px; }
+  .astat__number { font-size: clamp(36px, 10vw, 56px); }
 }

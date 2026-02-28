@@ -1,4 +1,4 @@
-/* LoadingScreen.jsx — Full-screen animated loader with progress bar */
+/* LoadingScreen.jsx */
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './LoadingScreen.css';
@@ -8,7 +8,6 @@ export default function LoadingScreen({ onDone }) {
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
-    // Simulate loading with accelerating progress
     const intervals = [
       setTimeout(() => setProgress(30), 100),
       setTimeout(() => setProgress(60), 400),
@@ -43,21 +42,32 @@ export default function LoadingScreen({ onDone }) {
 
           {/* Center content */}
           <div className="loader__center">
+            <div className="loader__name-wrap">
+              <motion.span
+                className="loader__name-first"
+                initial={{ opacity: 0, y: 32, skewY: 4 }}
+                animate={{ opacity: 1, y: 0, skewY: 0 }}
+                transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
+              >
+                LAMINE
+              </motion.span>
+              <motion.span
+                className="loader__name-last"
+                initial={{ opacity: 0, y: 32, skewY: 4 }}
+                animate={{ opacity: 1, y: 0, skewY: 0 }}
+                transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1], delay: 0.18 }}
+              >
+                NEGGAZI
+              </motion.span>
+            </div>
+
             <motion.div
-              className="loader__glitch"
+              className="loader__role"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.55 }}
             >
-              LN
-            </motion.div>
-            <motion.div
-              className="loader__label"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
-            >
-              INITIALIZING...
+              WEB DEVELOPER
             </motion.div>
           </div>
 

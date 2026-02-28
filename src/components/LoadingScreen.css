@@ -7,6 +7,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .loader__bar-track {
@@ -25,66 +26,46 @@
   transition: width 0.4s ease;
 }
 
+/* ── Center ── */
 .loader__center {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 18px;
+  overflow: hidden;
 }
 
-.loader__glitch {
+.loader__name-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  overflow: hidden;
+}
+
+.loader__name-first,
+.loader__name-last {
+  display: block;
   font-family: var(--font-display);
-  font-size: 96px;
-  letter-spacing: 8px;
+  font-size: clamp(52px, 12vw, 120px);
+  letter-spacing: clamp(6px, 2vw, 18px);
   color: #fff;
-  animation: glitch 1.5s infinite;
-  position: relative;
+  line-height: 1;
+  will-change: transform, opacity;
 }
 
-.loader__glitch::before,
-.loader__glitch::after {
-  content: 'LN';
-  position: absolute;
-  inset: 0;
-  font-family: var(--font-display);
+.loader__name-last {
+  /* Slight indent for visual rhythm */
+  padding-left: clamp(6px, 2vw, 18px);
 }
 
-.loader__glitch::before {
-  color: rgba(255, 255, 255, 0.3);
-  animation: glitch-before 1.5s infinite;
-  clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
-}
-
-.loader__glitch::after {
-  color: rgba(255, 255, 255, 0.2);
-  animation: glitch-after 1.5s infinite;
-  clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
-}
-
-@keyframes glitch {
-  0%, 90%, 100% { transform: translate(0); }
-  91% { transform: translate(-2px, 1px); }
-  93% { transform: translate(2px, -1px); }
-  95% { transform: translate(-1px, 2px); }
-}
-
-@keyframes glitch-before {
-  0%, 90%, 100% { transform: translate(0); }
-  92% { transform: translate(3px, 0); }
-  94% { transform: translate(-2px, 0); }
-}
-
-@keyframes glitch-after {
-  0%, 90%, 100% { transform: translate(0); }
-  91% { transform: translate(-3px, 1px); }
-  93% { transform: translate(2px, -1px); }
-}
-
-.loader__label {
+.loader__role {
   font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 6px;
+  font-size: clamp(10px, 1.5vw, 13px);
+  letter-spacing: clamp(5px, 1.5vw, 10px);
   color: var(--gray-500);
+  text-transform: uppercase;
+  will-change: transform, opacity;
 }
 
 .loader__percentage {

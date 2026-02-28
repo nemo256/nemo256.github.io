@@ -1,10 +1,14 @@
 /* HeroSection.jsx */
 import memoji from '../assets/memoji.png';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import './HeroSection.css';
 
 const WHATSAPP_URL = `https://wa.me/213794696605`;
 const PILLS = ['REACT', 'NODEJS', 'POSTGRESQL', 'LINUX'];
+const TYPED_TEXT = 'I DO WEB DEVELOPMENT';
+const TYPING_SPEED = 60; // ms per character
+const BLINK_DELAY = 400; // ms before cursor starts blinking after done
 
 const container = {
   hidden: {},
@@ -15,6 +19,40 @@ const item = {
   hidden: { opacity: 0, y: 30 },
   show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } }
 };
+
+function TypingText({ text, startDelay = 800 }) {
+  const [displayed, setDisplayed] = useState('');
+  const [done, setDone] = useState(false);
+  const idx = useRef(0);
+
+  useEffect(() => {
+    let startTimer;
+    let typeTimer;
+
+    startTimer = setTimeout(() => {
+      typeTimer = setInterval(() => {
+        idx.current += 1;
+        setDisplayed(text.slice(0, idx.current));
+        if (idx.current >= text.length) {
+          clearInterval(typeTimer);
+          setTimeout(() => setDone(true), BLINK_DELAY);
+        }
+      }, TYPING_SPEED);
+    }, startDelay);
+
+    return () => {
+      clearTimeout(startTimer);
+      clearInterval(typeTimer);
+    };
+  }, [text, startDelay]);
+
+  return (
+    <span className="hero__typed">
+      {displayed}
+      <span className={`hero__cursor${done ? ' hero__cursor--blink' : ''}`}>|</span>
+    </span>
+  );
+}
 
 export default function HeroSection() {
   return (
@@ -44,9 +82,9 @@ export default function HeroSection() {
           <span className="hero__title-name">LAMINE NEGGAZI</span>
         </motion.h1>
 
-        {/* Subtitle */}
+        {/* Typing subtitle */}
         <motion.p className="hero__subtitle" variants={item}>
-          I DO WEB DEVELOPMENT
+          <TypingText text={TYPED_TEXT} startDelay={900} />
         </motion.p>
 
         {/* Pills */}

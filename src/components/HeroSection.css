@@ -10,9 +10,7 @@
   padding: 100px var(--section-px) 80px;
 }
 
-@supports not (height: 100dvh) {
-  .hero { min-height: 100vh; }
-}
+@supports not (height: 100dvh) { .hero { min-height: 100vh; } }
 
 .hero__content {
   display: flex;
@@ -65,13 +63,40 @@
   display: block;
 }
 
-/* ── Subtitle ── */
+/* ── Typing subtitle ── */
 .hero__subtitle {
   font-family: var(--font-display);
   font-size: clamp(22px, 4vw, 52px);
   letter-spacing: 6px;
   color: var(--gray-400);
   text-transform: uppercase;
+  min-height: 1.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero__typed {
+  display: inline-flex;
+  align-items: center;
+}
+
+.hero__cursor {
+  display: inline-block;
+  margin-left: 2px;
+  color: #fff;
+  font-weight: 100;
+  /* Static while typing */
+  opacity: 1;
+}
+
+.hero__cursor--blink {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
 }
 
 /* ── Pills ── */
@@ -149,7 +174,6 @@
   .hero__cta { padding: 13px 32px; font-size: 22px; letter-spacing: 4px; }
 }
 
-/* ── Short landscape ── */
 @media (max-height: 600px) and (max-width: 900px) {
   .hero { padding-top: 80px; padding-bottom: 40px; }
   .hero__avatar-ring { width: 90px; height: 90px; }

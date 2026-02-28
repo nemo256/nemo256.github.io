@@ -1,11 +1,11 @@
-/* ProjectsSection.jsx */
-import { useRef, useState } from 'react';
-import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { ExternalLink, Github, ChevronLeft, ChevronRight } from 'lucide-react';
+/* ProjectsSection.jsx — full-screen per-project scroll experience */
+import { useRef, useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ExternalLink, Github } from 'lucide-react';
 import { projects } from '../data/projects.js';
 import './ProjectsSection.css';
 
-/* Expanding pill link — icon only, expands to show label on hover */
+/* Expanding pill link — icon only, expands on hover */
 function PillLink({ href, icon: Icon, label }) {
   if (!href) return null;
   return (
@@ -13,15 +13,15 @@ function PillLink({ href, icon: Icon, label }) {
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="pcard__pill-link"
+      className="pfs__pill-link"
       title={label}
       initial="rest"
       whileHover="hover"
       animate="rest"
     >
-      <Icon size={16} strokeWidth={1.4} className="pcard__pill-icon" />
+      <Icon size={16} strokeWidth={1.4} />
       <motion.span
-        className="pcard__pill-label"
+        className="pfs__pill-label"
         variants={{
           rest:  { width: 0, opacity: 0, marginLeft: 0 },
           hover: { width: 'auto', opacity: 1, marginLeft: 7 },
@@ -34,111 +34,151 @@ function PillLink({ href, icon: Icon, label }) {
   );
 }
 
-function ImageSlider({ images }) {
-  const [idx, setIdx] = useState(0);
-
-  const prev = (e) => { e.stopPropagation(); setIdx((i) => (i - 1 + images.length) % images.length); };
-  const next = (e) => { e.stopPropagation(); setIdx((i) => (i + 1) % images.length); };
-
+/* Single full-screen project slide */
+function ProjectSlide({ project, isActive }) {
   return (
-    <div className="pslider">
-      <div className="pslider__track">
-        <AnimatePresence mode="wait">
-          <motion.img
-            key={idx}
-            src={images[idx]}
-            alt={`Screenshot ${idx + 1}`}
-            className="pslider__img"
-            initial={{ opacity: 0, x: 16 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -16 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            draggable={false}
-          />
-        </AnimatePresence>
+    <motion.div
+      className="pfs__slide"
+      initial={{ opacity: 0, scale: 1.03 }}
+      animate={isActive ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.98 }}
+      transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+    >
+      {/* Background image */}
+      <div className="pfs__bg">
+        <img
+          src={project.images[0]}
+          alt={project.title}
+          className="pfs__bg-img"
+          draggable={false}
+        />
+        <div className="pfs__overlay" />
       </div>
 
-      {images.length > 1 && (
-        <>
-          <button className="pslider__btn pslider__btn--prev" onClick={prev} aria-label="Previous">
-            <ChevronLeft size={16} strokeWidth={1.5} />
-          </button>
-          <button className="pslider__btn pslider__btn--next" onClick={next} aria-label="Next">
-            <ChevronRight size={16} strokeWidth={1.5} />
-          </button>
-          <div className="pslider__dots">
-            {images.map((_, i) => (
-              <button
-                key={i}
-                className={`pslider__dot${i === idx ? ' active' : ''}`}
-                onClick={(e) => { e.stopPropagation(); setIdx(i); }}
-                aria-label={`Image ${i + 1}`}
-              />
+      {/* Content — bottom portion */}
+      <div className="pfs__content">
+        <div className="pfs__content-inner">
+          <h3 className="pfs__title">{project.title}</h3>
+          <p className="pfs__desc">{project.description}</p>
+
+          {/* Pills — same style as hero */}
+          <div className="pfs__tags">
+            {project.tags.map((t) => (
+              <motion.span
+                key={t}
+                className="pill pill--sm"
+                whileHover={{ scale: 1.06, backgroundColor: '#2a2a2a' }}
+                whileTap={{ scale: 0.96 }}
+                transition={{ duration: 0.18 }}
+              >
+                {t}
+              </motion.span>
             ))}
           </div>
-        </>
-      )}
-    </div>
+
+          <div className="pfs__links">
+            <PillLink href={project.demo}   icon={ExternalLink} label="DEMO"   />
+            <PillLink href={project.github} icon={Github}       label="GITHUB" />
+          </div>
+        </div>
+      </div>
+    </motion.div>
   );
 }
 
-const card = {
-  hidden: { opacity: 0, y: 32 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.16, 1, 0.3, 1] } }
-};
-
 export default function ProjectsSection() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-80px' });
+  const [current, setCurrent] = useState(0);
+  const containerRef = useRef(null);
+  const isThrottled = useRef(false);
+  const touchStart = useRef(null);
+
+  const goTo = useCallback((idx) => {
+    setCurrent(Math.max(0, Math.min(projects.length - 1, idx)));
+  }, []);
+
+  /* Wheel / keyboard handler inside section */
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const onWheel = (e) => {
+      if (isThrottled.current) return;
+      const delta = e.deltaY;
+      if (Math.abs(delta) < 20) return;
+
+      /* Allow native scroll to leave the section at boundaries */
+      if (delta > 0 && current >= projects.length - 1) return;
+      if (delta < 0 && current <= 0) return;
+
+      e.preventDefault();
+      isThrottled.current = true;
+      setCurrent((c) => delta > 0 ? Math.min(c + 1, projects.length - 1) : Math.max(c - 1, 0));
+      setTimeout(() => { isThrottled.current = false; }, 700);
+    };
+
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
+  }, [current]);
+
+  /* Touch swipe */
+  const onTouchStart = (e) => { touchStart.current = e.touches[0].clientY; };
+  const onTouchEnd = (e) => {
+    if (touchStart.current === null) return;
+    const delta = touchStart.current - e.changedTouches[0].clientY;
+    touchStart.current = null;
+    if (Math.abs(delta) < 40) return;
+    if (delta > 0) goTo(current + 1);
+    else goTo(current - 1);
+  };
 
   return (
     <div className="proj-section">
+      {/* Section title */}
       <div className="proj-section__header">
         <span className="section-label">PROJECTS</span>
-        <h2 className="proj-section__heading">
-          SELECTED<br />
-          <span className="proj-section__heading-accent">WORK</span>
-        </h2>
       </div>
 
-      <motion.div
-        ref={ref}
-        className="proj-section__grid"
-        initial="hidden"
-        animate={inView ? 'show' : 'hidden'}
-        variants={{ show: { transition: { staggerChildren: 0.1 } } }}
+      {/* Full-screen slides container */}
+      <div
+        ref={containerRef}
+        className="pfs"
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
       >
-        {projects.map((project) => (
-          <motion.article key={project.id} className="pcard" variants={card}>
-            <ImageSlider images={project.images} />
+        <AnimatePresence mode="wait">
+          <ProjectSlide key={current} project={projects[current]} isActive={true} />
+        </AnimatePresence>
 
-            <div className="pcard__body">
-              <h3 className="pcard__title">{project.title}</h3>
-              <p className="pcard__desc">{project.description}</p>
+        {/* Dot navigation */}
+        <div className="pfs__dots">
+          {projects.map((_, i) => (
+            <button
+              key={i}
+              className={`pfs__dot${i === current ? ' active' : ''}`}
+              onClick={() => goTo(i)}
+              aria-label={`Project ${i + 1}`}
+            />
+          ))}
+        </div>
 
-              {/* Pills — same style as hero */}
-              <div className="pcard__tags">
-                {project.tags.map((t) => (
-                  <motion.span
-                    key={t}
-                    className="pill pill--sm"
-                    whileHover={{ scale: 1.06, backgroundColor: '#2a2a2a' }}
-                    whileTap={{ scale: 0.96, backgroundColor: '#2a2a2a' }}
-                    transition={{ duration: 0.18 }}
-                  >
-                    {t}
-                  </motion.span>
-                ))}
-              </div>
+        {/* Arrow buttons */}
+        {current > 0 && (
+          <button className="pfs__arrow pfs__arrow--up" onClick={() => goTo(current - 1)} aria-label="Previous project">
+            <span>↑</span>
+          </button>
+        )}
+        {current < projects.length - 1 && (
+          <button className="pfs__arrow pfs__arrow--down" onClick={() => goTo(current + 1)} aria-label="Next project">
+            <span>↓</span>
+          </button>
+        )}
 
-              <div className="pcard__links">
-                <PillLink href={project.demo}   icon={ExternalLink} label="DEMO"   />
-                <PillLink href={project.github} icon={Github}       label="GITHUB" />
-              </div>
-            </div>
-          </motion.article>
-        ))}
-      </motion.div>
+        {/* Counter */}
+        <div className="pfs__counter">
+          <span className="pfs__counter-current">{String(current + 1).padStart(2, '0')}</span>
+          <span className="pfs__counter-sep">/</span>
+          <span className="pfs__counter-total">{String(projects.length).padStart(2, '0')}</span>
+        </div>
+      </div>
     </div>
   );
 }
