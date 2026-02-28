@@ -22,14 +22,9 @@
   --transition-fast: 0.2s ease;
   --transition-mid: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   --transition-slow: 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
 
-@media (prefers-color-scheme: light) {
-  :root {
-    --bg: #0a0a0a;
-    --gray-800: #1a1a1a;
-    --gray-900: #111111;
-  }
+  --section-px: clamp(20px, 5vw, 80px);
+  --section-py: clamp(80px, 10vh, 140px);
 }
 
 *, *::before, *::after {
@@ -42,16 +37,19 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-html, body, #root {
+html {
+  scroll-behavior: smooth;
   width: 100%;
-  /* dvh accounts for mobile browser chrome (address bar) shrinking */
-  height: 100dvh;
-  overflow: hidden;
 }
 
-/* Fallback for browsers without dvh support */
+body, #root {
+  width: 100%;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
 @supports not (height: 100dvh) {
-  html, body, #root { height: 100vh; }
+  body, #root { min-height: 100vh; }
 }
 
 body {
@@ -60,9 +58,10 @@ body {
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
-/* Desktop: hide system cursor — canvas draws its own */
+/* Desktop: hide system cursor */
 @media (hover: hover) and (pointer: fine) {
   body, *, *::before, *::after { cursor: none !important; }
 }
