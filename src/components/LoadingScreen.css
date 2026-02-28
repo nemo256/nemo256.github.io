@@ -12,18 +12,16 @@
 
 .loader__bar-track {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 0; left: 0; right: 0;
   height: 2px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255,255,255,0.08);
   overflow: hidden;
 }
 
 .loader__bar-fill {
   height: 100%;
   background: #fff;
-  transition: width 0.4s ease;
+  transition: width 0.5s ease;
 }
 
 /* ── Center ── */
@@ -31,8 +29,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 18px;
-  overflow: hidden;
+  gap: 22px;
 }
 
 .loader__name-wrap {
@@ -43,27 +40,31 @@
   overflow: hidden;
 }
 
+/* Heaviest possible weight — Bebas Neue is always weight 400 but we
+   compensate with very large size and tight tracking for maximum impact */
 .loader__name-first,
 .loader__name-last {
   display: block;
   font-family: var(--font-display);
-  font-size: clamp(52px, 12vw, 120px);
-  letter-spacing: clamp(6px, 2vw, 18px);
+  font-size: clamp(64px, 14vw, 150px);
+  letter-spacing: clamp(8px, 2.5vw, 24px);
   color: #fff;
-  line-height: 1;
+  line-height: 0.95;
   will-change: transform, opacity;
+  /* Stroke trick for extra visual weight */
+  -webkit-text-stroke: 1px rgba(255,255,255,0.15);
 }
 
 .loader__name-last {
-  /* Slight indent for visual rhythm */
-  padding-left: clamp(6px, 2vw, 18px);
+  padding-left: clamp(8px, 2.5vw, 24px); /* align with letter-spacing offset */
 }
 
 .loader__role {
-  font-family: var(--font-mono);
-  font-size: clamp(10px, 1.5vw, 13px);
-  letter-spacing: clamp(5px, 1.5vw, 10px);
-  color: var(--gray-500);
+  font-family: var(--font-body);
+  font-size: clamp(14px, 2.2vw, 22px);
+  font-weight: 700;
+  letter-spacing: clamp(6px, 2vw, 14px);
+  color: var(--gray-400);
   text-transform: uppercase;
   will-change: transform, opacity;
 }

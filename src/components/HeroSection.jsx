@@ -5,51 +5,85 @@ import { motion } from 'framer-motion';
 import './HeroSection.css';
 
 const WHATSAPP_URL = `https://wa.me/213794696605`;
-const PILLS = ['REACT', 'NODEJS', 'POSTGRESQL', 'LINUX'];
-const TYPED_TEXT = 'I DO WEB DEVELOPMENT';
-const TYPING_SPEED = 60; // ms per character
-const BLINK_DELAY = 400; // ms before cursor starts blinking after done
+
+// Typing sequence: type full → delete "WEB DEVELOPMENT" → pause → retype → loop
+const FULL    = 'I DO WEB DEVELOPMENT';
+const PREFIX  = 'I DO ';               // stays visible
+const SUFFIX  = 'WEB DEVELOPMENT';    // typed / deleted
+
+const TYPE_SPEED   = 60;   // ms per char while typing
+const DELETE_SPEED = 35;   // ms per char while deleting
+const PAUSE_FULL   = 1800; // ms pause when full text shown
+const PAUSE_PREFIX = 600;  // ms pause when only prefix shown
 
 const container = {
   hidden: {},
   show: { transition: { staggerChildren: 0.1, delayChildren: 0.15 } }
 };
-
 const item = {
   hidden: { opacity: 0, y: 30 },
   show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } }
 };
 
-function TypingText({ text, startDelay = 800 }) {
-  const [displayed, setDisplayed] = useState('');
-  const [done, setDone] = useState(false);
-  const idx = useRef(0);
+function TypingText() {
+  const [text, setText] = useState('');
+  const phase = useRef('idle'); // idle | typing | pause-full | deleting | pause-prefix
+  const timer = useRef(null);
 
   useEffect(() => {
-    let startTimer;
-    let typeTimer;
-
-    startTimer = setTimeout(() => {
-      typeTimer = setInterval(() => {
-        idx.current += 1;
-        setDisplayed(text.slice(0, idx.current));
-        if (idx.current >= text.length) {
-          clearInterval(typeTimer);
-          setTimeout(() => setDone(true), BLINK_DELAY);
-        }
-      }, TYPING_SPEED);
-    }, startDelay);
-
+    // Start with a small entrance delay
+    const startDelay = setTimeout(() => runPhase('typing'), 900);
     return () => {
-      clearTimeout(startTimer);
-      clearInterval(typeTimer);
+      clearTimeout(startDelay);
+      clearTimeout(timer.current);
     };
-  }, [text, startDelay]);
+  }, []);
+
+  function runPhase(nextPhase) {
+    phase.current = nextPhase;
+
+    if (nextPhase === 'typing') {
+      let i = 0;
+      setText(PREFIX);
+      const tick = () => {
+        i++;
+        setText(PREFIX + SUFFIX.slice(0, i));
+        if (i < SUFFIX.length) {
+          timer.current = setTimeout(tick, TYPE_SPEED);
+        } else {
+          timer.current = setTimeout(() => runPhase('pause-full'), PAUSE_FULL);
+        }
+      };
+      timer.current = setTimeout(tick, TYPE_SPEED);
+    }
+
+    if (nextPhase === 'pause-full') {
+      timer.current = setTimeout(() => runPhase('deleting'), 0);
+    }
+
+    if (nextPhase === 'deleting') {
+      let remaining = SUFFIX.length;
+      const tick = () => {
+        remaining--;
+        setText(PREFIX + SUFFIX.slice(0, remaining));
+        if (remaining > 0) {
+          timer.current = setTimeout(tick, DELETE_SPEED);
+        } else {
+          timer.current = setTimeout(() => runPhase('pause-prefix'), PAUSE_PREFIX);
+        }
+      };
+      timer.current = setTimeout(tick, DELETE_SPEED);
+    }
+
+    if (nextPhase === 'pause-prefix') {
+      timer.current = setTimeout(() => runPhase('typing'), 0);
+    }
+  }
 
   return (
     <span className="hero__typed">
-      {displayed}
-      <span className={`hero__cursor${done ? ' hero__cursor--blink' : ''}`}>|</span>
+      {text}
+      <span className="hero__cursor">|</span>
     </span>
   );
 }
@@ -84,23 +118,8 @@ export default function HeroSection() {
 
         {/* Typing subtitle */}
         <motion.p className="hero__subtitle" variants={item}>
-          <TypingText text={TYPED_TEXT} startDelay={900} />
+          <TypingText />
         </motion.p>
-
-        {/* Pills */}
-        <motion.div className="hero__pills" variants={item}>
-          {PILLS.map((label) => (
-            <motion.span
-              key={label}
-              className="pill"
-              whileHover={{ scale: 1.06, backgroundColor: '#2a2a2a' }}
-              whileTap={{ scale: 0.96, backgroundColor: '#2a2a2a' }}
-              transition={{ duration: 0.18 }}
-            >
-              {label}
-            </motion.span>
-          ))}
-        </motion.div>
 
         {/* CTA */}
         <motion.div className="hero__cta-wrap" variants={item}>
@@ -112,7 +131,7 @@ export default function HeroSection() {
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.97 }}
           >
-            LET'S BUILD
+            CONTACT
           </motion.a>
         </motion.div>
 

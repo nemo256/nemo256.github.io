@@ -1,4 +1,3 @@
-/* Projects section wrapper */
 .proj-section {
   border-top: 1px solid var(--gray-800);
   position: relative;
@@ -6,20 +5,31 @@
 }
 
 .proj-section__header {
-  padding: 40px var(--section-px) 0;
+  padding: 48px var(--section-px) 0;
   text-align: center;
 }
 
-/* Full-screen slides area */
+.proj-section__heading {
+  font-family: var(--font-display);
+  font-size: clamp(60px, 10vw, 130px);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 4px;
+  color: var(--gray-700);
+  text-transform: uppercase;
+}
+.proj-section__heading-accent { color: #fff; }
+
+/* ── Carousel container ── */
 .pfs {
   position: relative;
   width: 100%;
-  height: 100svh;
+  height: 90svh;
   overflow: hidden;
   background: #000;
+  margin-top: 32px;
 }
-
-@supports not (height: 100svh) { .pfs { height: 100vh; } }
+@supports not (height: 100svh) { .pfs { height: 90vh; } }
 
 /* ── Slide ── */
 .pfs__slide {
@@ -27,12 +37,15 @@
   inset: 0;
   display: flex;
   align-items: flex-end;
+  overflow: hidden;
 }
 
-/* ── Background image ── */
+/* ── Background image with hover scale ── */
 .pfs__bg {
   position: absolute;
   inset: 0;
+  overflow: hidden;
+  will-change: transform;
 }
 
 .pfs__bg-img {
@@ -41,42 +54,56 @@
   object-fit: cover;
   object-position: top center;
   display: block;
+  transition: transform 0.6s ease;
 }
 
-/* Gradient overlay — dark at bottom, light at top */
+/* Gradient: transparent at top, dark at bottom (only 35% of height) */
 .pfs__overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(0,0,0,0.1) 0%,
-    rgba(0,0,0,0.15) 40%,
-    rgba(0,0,0,0.75) 70%,
-    rgba(0,0,0,0.96) 100%
+    transparent 0%,
+    transparent 45%,
+    rgba(0,0,0,0.5) 62%,
+    rgba(0,0,0,0.92) 80%,
+    rgba(0,0,0,0.98) 100%
   );
 }
 
-/* ── Content block — bottom ── */
+/* Subtle glow at bottom center */
+.pfs__glow {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 35%;
+  background: radial-gradient(ellipse at center bottom, rgba(255,255,255,0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ── Content — bottom portion ── */
 .pfs__content {
   position: relative;
   z-index: 10;
   width: 100%;
-  padding: 0 var(--section-px) 60px;
+  padding: 0 var(--section-px) 56px;
 }
 
 .pfs__content-inner {
-  max-width: 720px;
+  max-width: 700px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 14px;
+  gap: 12px;
 }
 
 .pfs__title {
   font-family: var(--font-display);
-  font-size: clamp(40px, 6vw, 88px);
+  font-size: clamp(40px, 6vw, 86px);
   font-weight: 400;
   color: #fff;
   letter-spacing: 4px;
@@ -86,14 +113,20 @@
 
 .pfs__desc {
   font-family: var(--font-body);
-  font-size: clamp(13px, 1.4vw, 16px);
+  font-size: clamp(13px, 1.3vw, 16px);
   font-weight: 600;
-  color: rgba(255,255,255,0.65);
+  color: rgba(255,255,255,0.6);
   line-height: 1.65;
-  max-width: 520px;
+  max-width: 500px;
 }
 
-/* Pills — same as hero */
+/* Pills — inherit .pill from global but with glass bg */
+.pill--sm {
+  padding: 7px 16px;
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
 .pfs__tags {
   display: flex;
   flex-wrap: wrap;
@@ -101,19 +134,8 @@
   justify-content: center;
 }
 
-.pill--sm {
-  padding: 7px 16px;
-  font-size: 10px;
-  letter-spacing: 2px;
-}
-
-/* ── Expanding link buttons ── */
-.pfs__links {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
+/* ── Expanding links ── */
+.pfs__links { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 
 .pfs__pill-link {
   display: inline-flex;
@@ -132,111 +154,83 @@
   backdrop-filter: blur(8px);
   transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 }
+.pfs__pill-link:hover { color: #fff; border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.14); }
+.pfs__pill-label { display: inline-block; overflow: hidden; white-space: nowrap; font-size: 10px; letter-spacing: 2px; }
 
-.pfs__pill-link:hover {
-  color: #fff;
-  border-color: rgba(255,255,255,0.5);
-  background: rgba(255,255,255,0.14);
-}
-
-.pfs__pill-label {
-  display: inline-block;
-  overflow: hidden;
-  white-space: nowrap;
-  font-size: 10px;
-  letter-spacing: 2px;
-}
-
-/* ── Dot navigation ── */
-.pfs__dots {
-  position: absolute;
-  right: 28px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  z-index: 20;
-}
-
-.pfs__dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.3);
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  transition: background 0.25s ease, transform 0.25s ease;
-}
-
-.pfs__dot.active {
-  background: #fff;
-  transform: scale(1.5);
-}
-
-/* ── Arrows ── */
+/* ── Left / Right arrows ── */
 .pfs__arrow {
   position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 50%;
+  transform: translateY(-50%);
   z-index: 20;
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.2);
-  color: rgba(255,255,255,0.6);
+  background: rgba(0,0,0,0.55);
+  border: 1px solid rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.7);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
-  backdrop-filter: blur(6px);
-  transition: background 0.2s ease, color 0.2s ease;
+  backdrop-filter: blur(8px);
+  transition: background 0.2s ease, color 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
 }
+.pfs__arrow:hover { background: rgba(255,255,255,0.12); color: #fff; }
+.pfs__arrow.disabled { opacity: 0.2; pointer-events: none; }
+.pfs__arrow--left  { left: 20px; }
+.pfs__arrow--right { right: 20px; }
+.pfs__arrow--left:hover  { transform: translateY(-50%) translateX(-3px); }
+.pfs__arrow--right:hover { transform: translateY(-50%) translateX(3px); }
 
-.pfs__arrow:hover { background: rgba(255,255,255,0.16); color: #fff; }
-.pfs__arrow--up { top: 20px; }
-.pfs__arrow--down { bottom: 20px; }
+/* ── Dots ── */
+.pfs__dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 20;
+}
+.pfs__dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  border: none; padding: 0;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+.pfs__dot.active { background: #fff; transform: scale(1.5); }
 
 /* ── Counter ── */
 .pfs__counter {
   position: absolute;
-  left: 28px;
-  bottom: 28px;
-  display: flex;
-  align-items: baseline;
-  gap: 5px;
+  left: 24px; bottom: 20px;
+  display: flex; align-items: baseline; gap: 5px;
   z-index: 20;
 }
+.pfs__counter-current { font-family: var(--font-display); font-size: 38px; color: #fff; line-height: 1; letter-spacing: 2px; }
+.pfs__counter-sep { font-family: var(--font-mono); font-size: 11px; color: var(--gray-600); }
+.pfs__counter-total { font-family: var(--font-mono); font-size: 11px; color: var(--gray-600); letter-spacing: 1px; }
 
-.pfs__counter-current {
-  font-family: var(--font-display);
-  font-size: 40px;
-  color: #fff;
-  line-height: 1;
-  letter-spacing: 2px;
-}
-
-.pfs__counter-sep {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--gray-600);
-}
-
-.pfs__counter-total {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--gray-600);
-  letter-spacing: 1px;
+/* Tablet */
+@media (max-width: 900px) {
+  .proj-section__heading { letter-spacing: 2px; }
+  .pfs { height: 85svh; }
+  .pfs__content { padding: 0 28px 44px; }
 }
 
 /* Mobile */
-@media (max-width: 640px) {
-  .pfs__content { padding: 0 20px 50px; }
-  .pfs__title { font-size: clamp(32px, 10vw, 56px); letter-spacing: 2px; }
-  .pfs__dots { right: 14px; }
-  .pfs__counter { left: 16px; bottom: 18px; }
-  .pfs__counter-current { font-size: 30px; }
-  .pfs__arrow { display: none; }
+@media (max-width: 480px) {
+  .proj-section__header { padding: 40px 20px 0; }
+  .proj-section__heading { font-size: clamp(48px, 15vw, 80px); letter-spacing: 1px; }
+  .pfs { height: 80svh; margin-top: 24px; }
+  .pfs__content { padding: 0 16px 44px; }
+  .pfs__title { font-size: clamp(30px, 9vw, 52px); letter-spacing: 2px; }
+  .pfs__desc { font-size: 13px; }
+  .pfs__arrow { width: 38px; height: 38px; }
+  .pfs__arrow--left  { left: 10px; }
+  .pfs__arrow--right { right: 10px; }
+  .pfs__counter { left: 14px; bottom: 14px; }
+  .pfs__counter-current { font-size: 28px; }
+  .pfs__dots { bottom: 14px; }
 }

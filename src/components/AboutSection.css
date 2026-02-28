@@ -17,22 +17,7 @@
 }
 
 /* ── Left ── */
-.about__left {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.section-label {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 5px;
-  color: var(--gray-600);
-  text-transform: uppercase;
-  margin-bottom: 24px;
-}
+.about__left { display: flex; flex-direction: column; gap: 0; }
 
 .about__heading {
   font-family: var(--font-display);
@@ -44,7 +29,6 @@
   text-transform: uppercase;
   margin-bottom: 32px;
 }
-
 .about__heading-accent { color: #fff; }
 
 .about__body {
@@ -65,16 +49,11 @@
   flex-shrink: 0;
 }
 
-.astat {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 2px;
-}
+.astat { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
 
 .astat__number {
   font-family: var(--font-display);
-  font-size: clamp(44px, 6vw, 72px);
+  font-size: clamp(44px, 6vw, 76px);
   line-height: 1;
   color: #fff;
   letter-spacing: 2px;
@@ -89,26 +68,22 @@
   text-transform: uppercase;
 }
 
-/* Tablet — stack vertically */
+/* ── Tablet ── */
 @media (max-width: 900px) {
-  .about__inner {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-  .about__stats {
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 32px;
-  }
+  .about__inner { grid-template-columns: 1fr; gap: 40px; }
+  .about__stats { flex-direction: row; align-items: flex-start; gap: 32px; }
   .astat { align-items: flex-start; }
   .about__heading { letter-spacing: 2px; }
 }
 
-/* Mobile */
+/* ── Mobile — center both columns ── */
 @media (max-width: 480px) {
   .about { padding: 64px 20px; }
-  .about__heading { font-size: clamp(44px, 14vw, 76px); letter-spacing: 1px; margin-bottom: 22px; }
-  .about__body { font-size: 14px; }
-  .about__stats { gap: 24px; }
+  .about__inner { gap: 32px; }
+  .about__left { align-items: center; text-align: center; }
+  .about__heading { font-size: clamp(44px, 14vw, 76px); letter-spacing: 1px; margin-bottom: 20px; }
+  .about__body { font-size: 14px; max-width: 100%; }
+  .about__stats { flex-direction: row; align-items: center; justify-content: center; gap: 28px; }
+  .astat { align-items: center; text-align: center; }
   .astat__number { font-size: clamp(36px, 10vw, 56px); }
 }

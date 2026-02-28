@@ -1,9 +1,6 @@
-/* Same visual as the loading bar — thin top line */
 .scrollbar-track {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 0; left: 0; right: 0;
   height: 2px;
   background: transparent;
   z-index: 9999;
@@ -12,7 +9,10 @@
 
 .scrollbar-fill {
   height: 100%;
+  width: 100%;                     /* always full width */
   background: #fff;
-  transition: width 0.05s linear;
-  will-change: width;
+  transform: scaleX(0);            /* controlled via JS */
+  transform-origin: left center;
+  will-change: transform;
+  /* No CSS transition — rAF handles smoothness */
 }

@@ -1,15 +1,16 @@
-/* AboutSection.jsx — left: about text, right: 3 compact stats */
+/* AboutSection.jsx — left: about text, right: 3 stats */
 import { useRef, useEffect, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import './AboutSection.css';
 
+// Exact requested values
 const STATS = [
-  { value: 3,   suffix: '+', label: 'YEARS EXP'    },
-  { value: 200, suffix: '+', label: 'CONTRIBUTIONS' },
-  { value: 6,   suffix: '+', label: 'PROJECTS'      },
+  { display: '4',   label: 'YEARS EXP',     target: 4,    suffix: ''  },
+  { display: '4K+', label: 'CONTRIBUTIONS', target: 4000, suffix: '+', formatK: true },
+  { display: '9+',  label: 'PROJECTS',      target: 9,    suffix: '+' },
 ];
 
-function CountUp({ target, suffix, active }) {
+function CountUp({ target, suffix, formatK, active }) {
   const [count, setCount] = useState(0);
   useEffect(() => {
     if (!active) return;
@@ -24,7 +25,12 @@ function CountUp({ target, suffix, active }) {
     }, stepTime);
     return () => clearInterval(timer);
   }, [active, target]);
-  return <span className="astat__number">{count}{suffix}</span>;
+
+  const formatted = formatK
+    ? count >= 1000 ? `${(count / 1000).toFixed(1).replace('.0', '')}K+` : count
+    : `${count}${suffix}`;
+
+  return <span className="astat__number">{formatted}</span>;
 }
 
 const fadeUp = {
@@ -47,13 +53,10 @@ export default function AboutSection() {
       >
         {/* Left — text */}
         <div className="about__left">
-          <motion.span className="section-label" variants={fadeUp}>ABOUT</motion.span>
-
           <motion.h2 className="about__heading" variants={fadeUp}>
             FULL-STACK<br />
             <span className="about__heading-accent">DEVELOPER.</span>
           </motion.h2>
-
           <motion.p className="about__body" variants={fadeUp}>
             Based in Algiers. I build fast, modern web products — clean UIs, solid back-ends, real results.
           </motion.p>
@@ -61,9 +64,9 @@ export default function AboutSection() {
 
         {/* Right — stats */}
         <motion.div className="about__stats" variants={fadeUp}>
-          {STATS.map(({ value, suffix, label }) => (
+          {STATS.map(({ target, suffix, formatK, label }) => (
             <div key={label} className="astat">
-              <CountUp target={value} suffix={suffix} active={inView} />
+              <CountUp target={target} suffix={suffix} formatK={formatK} active={inView} />
               <span className="astat__label">{label}</span>
             </div>
           ))}

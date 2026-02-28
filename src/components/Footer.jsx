@@ -1,24 +1,25 @@
-/* Footer.jsx */
-import { motion } from 'framer-motion';
+/* Footer.jsx — copyright + GitHub & LinkedIn links */
 import './Footer.css';
+import { Github, Linkedin } from 'lucide-react';
 
-const WHATSAPP_URL = 'https://wa.me/213794696605';
+const GITHUB_URL   = 'https://github.com/nemo256';
+const LINKEDIN_URL = 'https://linkedin.com/in/lamine-neggazi';
 
 export default function Footer() {
+  const year = new Date().getFullYear();
+
   return (
     <footer className="footer">
-      <span className="footer__name">LAMINE NEGGAZI · 2026</span>
+      <span className="footer__copy">© {year} Lamine Neggazi</span>
 
-      <motion.a
-        href={WHATSAPP_URL}
-        target="_blank"
-        rel="noreferrer"
-        className="footer__cta"
-        whileHover={{ scale: 1.04 }}
-        whileTap={{ scale: 0.97 }}
-      >
-        LET'S BUILD
-      </motion.a>
+      <div className="footer__links">
+        <a href={GITHUB_URL} target="_blank" rel="noreferrer" className="footer__icon-link" aria-label="GitHub">
+          <Github size={18} strokeWidth={1.5} />
+        </a>
+        <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" className="footer__icon-link" aria-label="LinkedIn">
+          <Linkedin size={18} strokeWidth={1.5} />
+        </a>
+      </div>
     </footer>
   );
 }
