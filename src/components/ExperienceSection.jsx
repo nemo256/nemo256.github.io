@@ -4,7 +4,7 @@ import { motion, useInView } from 'framer-motion';
 import './ExperienceSection.css';
 
 const ITEMS = [
-  { type: 'work', period: '2024 — NOW',  role: 'Full-Stack Developer', org: 'SONATRACH · Algier', desc: 'Building and maintaining internal web applications and systems.' },
+  { type: 'work', period: '2024 — NOW',  role: 'Full-Stack Developer', org: 'SONATRACH · Algiers', desc: 'Building and maintaining internal web applications and systems.' },
   { type: 'work', period: '2023 — 2024', role: 'Front-End Developer',  org: 'EKRILI · Algiers', desc: 'Developing and enhancing the startup’s web interface, focusing on responsive design, performance, and user experience.' },
   { type: 'work', period: '2022 — 2023', role: 'Part-Time Professor',  org: 'University of Boumerdes · Boumerdes',   desc: 'Teaching and supporting students with course materials, assignments, and academic guidance.' },
   { type: 'cert', period: '2025',        role: 'CEH (Certified Ethical Hacker) Certificate', org: 'SONATRACH MANAGEMENT ACADEMY', desc: 'Certified in ethical hacking fundamentals, penetration testing, and cybersecurity best practices.' },
