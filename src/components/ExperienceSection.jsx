@@ -11,7 +11,7 @@ const ITEMS = [
   { type: 'cert', period: '2024',        role: 'Project Management Certificate', org: 'SONATRACH MANAGEMENT ACADEMY · ORAN', desc: 'Learned project planning, team collaboration, and project delivery using Agile and Scrum practices.' },
   { type: 'cert',  period: '2024',       role: "Microsoft Configuration Manager (SCCM) Certificate",   org: 'SONATRACH MANAGEMENT ACADEMY · ORAN', desc: 'Trained in system deployment, configuration management, and enterprise infrastructure administration.' },
   { type: 'edu',  period: '2020 — 2022', role: "Master's in Information Technology", org: 'University of Boumerdes · Boumerdes',        desc: 'Studied software development, databases, and computer systems fundamentals.' },
-  { type: 'edu',  period: '2017 — 2020', role: "Bachelor's in Information Systems", org: 'University of Boumerdes · Boumerde',          desc: 'Algorithms, data structures, databases, and operating systems.' },
+  { type: 'edu',  period: '2017 — 2020', role: "Bachelor's in Information Systems", org: 'University of Boumerdes · Boumerdes',         desc: 'Algorithms, data structures, databases, and operating systems.' },
 ];
 
 const TYPE_LABEL = { work: 'EXPERIENCE', cert: 'FORMATION', edu: 'EDUCATION' };
