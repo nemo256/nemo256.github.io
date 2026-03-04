@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && rm -rf docs && mv dist docs && cp CNAME docs/CNAME || true",
     "preview": "vite preview"
   },
   "dependencies": {
