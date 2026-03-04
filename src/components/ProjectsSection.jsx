@@ -1,9 +1,12 @@
-/* ProjectsSection.jsx — horizontal carousel, one project at a time */
-import { useRef, useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ExternalLink, Github, ChevronLeft, ChevronRight } from 'lucide-react';
+/* ProjectsSection.jsx — scroll reveal grid, Show More */
+import { useRef, useState } from 'react';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
+import { ExternalLink, Github } from 'lucide-react';
 import { projects } from '../data/projects.js';
 import './ProjectsSection.css';
+import { BorderBeam } from './ui/border-beam.jsx';
+
+const INITIAL_COUNT = 3;
 
 function PillLink({ href, icon: Icon, label }) {
   if (!href) return null;
@@ -12,20 +15,20 @@ function PillLink({ href, icon: Icon, label }) {
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="pfs__pill-link"
+      className="proj__pill-link"
       title={label}
       initial="rest"
       whileHover="hover"
       animate="rest"
     >
-      <Icon size={16} strokeWidth={1.4} />
+      <Icon size={15} strokeWidth={1.4} />
       <motion.span
-        className="pfs__pill-label"
+        className="proj__pill-label"
         variants={{
           rest:  { width: 0, opacity: 0, marginLeft: 0 },
-          hover: { width: 'auto', opacity: 1, marginLeft: 7 },
+          hover: { width: 'auto', opacity: 1, marginLeft: 6 },
         }}
-        transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
       >
         {label}
       </motion.span>
@@ -33,147 +36,109 @@ function PillLink({ href, icon: Icon, label }) {
   );
 }
 
-const slideVariants = {
-  enter: (dir) => ({ opacity: 0, x: dir > 0 ? 80 : -80, scale: 0.97 }),
-  center: { opacity: 1, x: 0, scale: 1 },
-  exit:  (dir) => ({ opacity: 0, x: dir > 0 ? -80 : 80, scale: 0.97 }),
-};
-
-export default function ProjectsSection() {
-  const [[current, direction], setPage] = useState([0, 0]);
-  const isThrottled = useRef(false);
-  const touchStart = useRef(null);
-
-  const goTo = useCallback((next) => {
-    const clamped = Math.max(0, Math.min(projects.length - 1, next));
-    setPage(([prev]) => [clamped, next > prev ? 1 : -1]);
-  }, []);
-
-  const prev = () => { if (current > 0) goTo(current - 1); };
-  const next = () => { if (current < projects.length - 1) goTo(current + 1); };
-
-  const onTouchStart = (e) => { touchStart.current = e.touches[0].clientX; };
-  const onTouchEnd = (e) => {
-    if (touchStart.current === null) return;
-    const dx = touchStart.current - e.changedTouches[0].clientX;
-    touchStart.current = null;
-    if (Math.abs(dx) < 40) return;
-    dx > 0 ? next() : prev();
-  };
-
-  const project = projects[current];
+function ProjectCard({ project, index }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: false, margin: '-10% 0px -10% 0px' });
 
   return (
-    <div className="proj-section">
-      {/* Title styled like CAREER & EDUCATION */}
-      <div className="proj-section__header">
-        <h2 className="proj-section__heading">
-          <span className="proj-section__heading-accent">PROJECTS</span>
-        </h2>
+    <motion.div
+      ref={ref}
+      className="proj__card"
+      initial={{ opacity: 0, y: 60 }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 60 }}
+      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: (index % 3) * 0.1 }}
+    >
+      {/* Image */}
+      <div className="proj__card-img-wrap">
+        <motion.img
+          src={project.images[0]}
+          alt={project.title}
+          className="proj__card-img"
+          whileHover={{ scale: 1.06 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        />
+        <div className="proj__card-overlay" />
       </div>
 
-      <div
-        className="pfs"
-        onTouchStart={onTouchStart}
-        onTouchEnd={onTouchEnd}
-      >
-        <AnimatePresence mode="wait" custom={direction}>
-          <motion.div
-            key={current}
-            className="pfs__slide"
-            custom={direction}
-            variants={slideVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-          >
-            {/* Background image with subtle scale on hover */}
-            <motion.div
-              className="pfs__bg"
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <img
-                src={project.images[0]}
-                alt={project.title}
-                className="pfs__bg-img"
-                draggable={false}
-              />
-            </motion.div>
+      {/* BorderBeam */}
+      <BorderBeam duration={8} size={180} delay={index * 1.5} />
 
-            {/* Gradient overlay */}
-            <div className="pfs__overlay" />
+      {/* Content */}
+      <div className="proj__card-content">
+        <h3 className="proj__card-title">{project.title}</h3>
+        <p className="proj__card-desc">{project.description}</p>
 
-            {/* Subtle glow */}
-            <div className="pfs__glow" />
-
-            {/* Content — bottom ~35% */}
-            <div className="pfs__content">
-              <div className="pfs__content-inner">
-                <h3 className="pfs__title">{project.title}</h3>
-                <p className="pfs__desc">{project.description}</p>
-
-                <div className="pfs__tags">
-                  {project.tags.map((t) => (
-                    <motion.span
-                      key={t}
-                      className="pill pill--sm"
-                      whileHover={{ scale: 1.06, backgroundColor: 'rgba(255,255,255,0.15)' }}
-                      whileTap={{ scale: 0.96 }}
-                      transition={{ duration: 0.18 }}
-                    >
-                      {t}
-                    </motion.span>
-                  ))}
-                </div>
-
-                <div className="pfs__links">
-                  <PillLink href={project.demo}   icon={ExternalLink} label="DEMO"   />
-                  <PillLink href={project.github} icon={Github}       label="GITHUB" />
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </AnimatePresence>
-
-        {/* Left / Right arrows */}
-        <button
-          className={`pfs__arrow pfs__arrow--left${current === 0 ? ' disabled' : ''}`}
-          onClick={prev}
-          aria-label="Previous project"
-          disabled={current === 0}
-        >
-          <ChevronLeft size={22} strokeWidth={1.5} />
-        </button>
-        <button
-          className={`pfs__arrow pfs__arrow--right${current === projects.length - 1 ? ' disabled' : ''}`}
-          onClick={next}
-          aria-label="Next project"
-          disabled={current === projects.length - 1}
-        >
-          <ChevronRight size={22} strokeWidth={1.5} />
-        </button>
-
-        {/* Dot indicators */}
-        <div className="pfs__dots">
-          {projects.map((_, i) => (
-            <button
-              key={i}
-              className={`pfs__dot${i === current ? ' active' : ''}`}
-              onClick={() => goTo(i)}
-              aria-label={`Project ${i + 1}`}
-            />
+        <div className="proj__card-tags">
+          {project.tags.map((t) => (
+            <span key={t} className="proj__tag">{t}</span>
           ))}
         </div>
 
-        {/* Counter */}
-        <div className="pfs__counter">
-          <span className="pfs__counter-current">{String(current + 1).padStart(2, '0')}</span>
-          <span className="pfs__counter-sep">/</span>
-          <span className="pfs__counter-total">{String(projects.length).padStart(2, '0')}</span>
+        <div className="proj__card-links">
+          <PillLink href={project.demo}   icon={ExternalLink} label="DEMO"   />
+          <PillLink href={project.github} icon={Github}       label="GITHUB" />
         </div>
       </div>
+    </motion.div>
+  );
+}
+
+export default function ProjectsSection() {
+  const [showAll, setShowAll] = useState(false);
+  const headerRef = useRef(null);
+  const headerInView = useInView(headerRef, { once: false, margin: '-80px' });
+
+  const visible = showAll ? projects : projects.slice(0, INITIAL_COUNT);
+  const hidden  = projects.slice(INITIAL_COUNT);
+
+  return (
+    <div className="proj-section">
+      {/* Section heading with scroll reveal scale */}
+      <div className="proj-section__header" ref={headerRef}>
+        <motion.h2
+          className="proj-section__heading"
+          initial={{ opacity: 0, scale: 0.88 }}
+          animate={headerInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.88, y: 24 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <span className="proj-section__heading-accent">PROJECTS</span>
+        </motion.h2>
+      </div>
+
+      {/* Cards grid */}
+      <div className="proj__grid">
+        {visible.map((project, i) => (
+          <ProjectCard key={project.id} project={project} index={i} />
+        ))}
+
+        {/* Reveal remaining with animation */}
+        <AnimatePresence>
+          {showAll && hidden.map((project, i) => (
+            <motion.div
+              key={project.id}
+              initial={{ opacity: 0, y: 60 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1], delay: i * 0.1 }}
+            >
+              <ProjectCard project={project} index={INITIAL_COUNT + i} />
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </div>
+
+      {/* Show More / Show Less button */}
+      {projects.length > INITIAL_COUNT && (
+        <div className="proj__show-more-wrap">
+          <motion.button
+            className="proj__show-more"
+            onClick={() => setShowAll((v) => !v)}
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.97 }}
+          >
+            {showAll ? 'SHOW LESS' : 'SHOW MORE'}
+          </motion.button>
+        </div>
+      )}
     </div>
   );
 }

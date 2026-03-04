@@ -1,20 +1,17 @@
 /* HeroSection.jsx */
 import memoji from '../assets/memoji.png';
 import { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import './HeroSection.css';
 
 const WHATSAPP_URL = `https://wa.me/213794696605`;
 
-// Typing sequence: type full → delete "WEB DEVELOPMENT" → pause → retype → loop
-const FULL    = 'I DO WEB DEVELOPMENT';
-const PREFIX  = 'I DO ';               // stays visible
-const SUFFIX  = 'WEB DEVELOPMENT';    // typed / deleted
-
-const TYPE_SPEED   = 60;   // ms per char while typing
-const DELETE_SPEED = 35;   // ms per char while deleting
-const PAUSE_FULL   = 1800; // ms pause when full text shown
-const PAUSE_PREFIX = 600;  // ms pause when only prefix shown
+const PREFIX  = 'I DO ';
+const SUFFIX  = 'WEB DEVELOPMENT';
+const TYPE_SPEED   = 60;
+const DELETE_SPEED = 35;
+const PAUSE_FULL   = 1800;
+const PAUSE_PREFIX = 600;
 
 const container = {
   hidden: {},
@@ -22,77 +19,110 @@ const container = {
 };
 const item = {
   hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } }
+  show:   { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } }
 };
+
+/* ── Diamond star shape ── */
+function StarDot({ style }) {
+  return (
+    <span className="hero__star" style={style}>
+      <svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="5,0 6.5,3.5 10,5 6.5,6.5 5,10 3.5,6.5 0,5 3.5,3.5" fill="currentColor" />
+      </svg>
+    </span>
+  );
+}
+
+/* Star positions + timing */
+const STARS = [
+  { top: '-14px', left:  '6%',  size: 7,  delay: 0,    dur: 2.8 },
+  { top: '-6px',  left:  '28%', size: 4,  delay: 0.55, dur: 2.2 },
+  { top: '-16px', left:  '58%', size: 9,  delay: 1.1,  dur: 3.1 },
+  { top:  '8px',  left:  '88%', size: 5,  delay: 0.3,  dur: 2.5 },
+  { top:  '55%',  left: '-14px',size: 6,  delay: 0.75, dur: 2.9 },
+  { top:  '70%',  left:  '96%', size: 4,  delay: 1.4,  dur: 2.3 },
+  { top: '108%',  left:  '18%', size: 5,  delay: 0.2,  dur: 2.7 },
+  { top: '105%',  left:  '72%', size: 7,  delay: 0.9,  dur: 3.0 },
+];
+
+/* ── LAMINE with shimmer + stars ── */
+function LamineName() {
+  return (
+    <span className="hero__lamine-wrap">
+      {STARS.map((s, i) => (
+        <StarDot
+          key={i}
+          style={{
+            top: s.top,
+            left: s.left,
+            width: `${s.size}px`,
+            height: `${s.size}px`,
+            animationDelay: `${s.delay}s`,
+            animationDuration: `${s.dur}s`,
+          }}
+        />
+      ))}
+      <span className="hero__lamine-text">LAMINE</span>
+    </span>
+  );
+}
 
 function TypingText() {
   const [text, setText] = useState('');
-  const phase = useRef('idle'); // idle | typing | pause-full | deleting | pause-prefix
+  const phase = useRef('idle');
   const timer = useRef(null);
 
   useEffect(() => {
-    // Start with a small entrance delay
     const startDelay = setTimeout(() => runPhase('typing'), 900);
-    return () => {
-      clearTimeout(startDelay);
-      clearTimeout(timer.current);
-    };
+    return () => { clearTimeout(startDelay); clearTimeout(timer.current); };
   }, []);
 
   function runPhase(nextPhase) {
     phase.current = nextPhase;
-
     if (nextPhase === 'typing') {
       let i = 0;
       setText(PREFIX);
       const tick = () => {
         i++;
         setText(PREFIX + SUFFIX.slice(0, i));
-        if (i < SUFFIX.length) {
-          timer.current = setTimeout(tick, TYPE_SPEED);
-        } else {
-          timer.current = setTimeout(() => runPhase('pause-full'), PAUSE_FULL);
-        }
+        if (i < SUFFIX.length) timer.current = setTimeout(tick, TYPE_SPEED);
+        else timer.current = setTimeout(() => runPhase('pause-full'), PAUSE_FULL);
       };
       timer.current = setTimeout(tick, TYPE_SPEED);
     }
-
-    if (nextPhase === 'pause-full') {
-      timer.current = setTimeout(() => runPhase('deleting'), 0);
-    }
-
+    if (nextPhase === 'pause-full')  timer.current = setTimeout(() => runPhase('deleting'), 0);
     if (nextPhase === 'deleting') {
       let remaining = SUFFIX.length;
       const tick = () => {
         remaining--;
         setText(PREFIX + SUFFIX.slice(0, remaining));
-        if (remaining > 0) {
-          timer.current = setTimeout(tick, DELETE_SPEED);
-        } else {
-          timer.current = setTimeout(() => runPhase('pause-prefix'), PAUSE_PREFIX);
-        }
+        if (remaining > 0) timer.current = setTimeout(tick, DELETE_SPEED);
+        else timer.current = setTimeout(() => runPhase('pause-prefix'), PAUSE_PREFIX);
       };
       timer.current = setTimeout(tick, DELETE_SPEED);
     }
-
-    if (nextPhase === 'pause-prefix') {
-      timer.current = setTimeout(() => runPhase('typing'), 0);
-    }
+    if (nextPhase === 'pause-prefix') timer.current = setTimeout(() => runPhase('typing'), 0);
   }
 
   return (
     <span className="hero__typed">
-      {text}
-      <span className="hero__cursor">|</span>
+      {text}<span className="hero__cursor">|</span>
     </span>
   );
 }
 
 export default function HeroSection() {
-  return (
-    <div className="hero">
-      <motion.div className="hero__content" variants={container} initial="hidden" animate="show">
+  const ref    = useRef(null);
+  const inView = useInView(ref, { margin: '-10% 0px -10% 0px' });
 
+  return (
+    <div className="hero" ref={ref}>
+      <motion.div
+        className="hero__content"
+        variants={container}
+        initial="hidden"
+        animate={inView ? 'show' : 'hidden'}
+      >
         {/* Memoji */}
         <motion.div className="hero__avatar" variants={item} whileHover="hover" whileTap="hover">
           <motion.div
@@ -113,7 +143,9 @@ export default function HeroSection() {
         {/* Main title */}
         <motion.h1 className="hero__title" variants={item}>
           HI, MY NAME IS<br />
-          <span className="hero__title-name">LAMINE NEGGAZI</span>
+          <span className="hero__title-name">
+            <LamineName /> NEGGAZI
+          </span>
         </motion.h1>
 
         {/* Typing subtitle */}
@@ -131,10 +163,9 @@ export default function HeroSection() {
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.97 }}
           >
-            CONTACT
+            CONTACT ME
           </motion.a>
         </motion.div>
-
       </motion.div>
     </div>
   );

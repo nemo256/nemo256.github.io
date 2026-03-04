@@ -17,7 +17,6 @@
   background: rgba(255,255,255,0.08);
   overflow: hidden;
 }
-
 .loader__bar-fill {
   height: 100%;
   background: #fff;
@@ -37,12 +36,42 @@
   flex-direction: column;
   align-items: center;
   gap: 0;
-  overflow: hidden;
 }
 
-/* Heaviest possible weight — Bebas Neue is always weight 400 but we
-   compensate with very large size and tight tracking for maximum impact */
-.loader__name-first,
+/* LAMINE wrapper — relative for star positioning */
+.loader__name-first-wrap {
+  position: relative;
+  display: block;
+  line-height: 0.95;
+}
+
+/* LAMINE — shimmer gradient */
+.loader__name-first {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(64px, 14vw, 150px);
+  letter-spacing: clamp(8px, 2.5vw, 24px);
+  line-height: 0.95;
+  will-change: transform, opacity;
+  background: linear-gradient(
+    105deg,
+    #ffffff  0%,
+    #c0c0c0  18%,
+    #ffffff  35%,
+    #ffffff  50%,
+    #d4d4d4  68%,
+    #ffffff  82%,
+    #ffffff  100%
+  );
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: lamine-shimmer 4s linear infinite;
+  filter: drop-shadow(0 0 16px rgba(255,255,255,0.2));
+}
+
+/* NEGGAZI */
 .loader__name-last {
   display: block;
   font-family: var(--font-display);
@@ -51,12 +80,25 @@
   color: #fff;
   line-height: 0.95;
   will-change: transform, opacity;
-  /* Stroke trick for extra visual weight */
+  padding-left: clamp(8px, 2.5vw, 24px);
   -webkit-text-stroke: 1px rgba(255,255,255,0.15);
 }
 
-.loader__name-last {
-  padding-left: clamp(8px, 2.5vw, 24px); /* align with letter-spacing offset */
+/* Diamond star dots on LAMINE */
+.loader__star {
+  position: absolute;
+  color: rgba(255, 255, 255, 0.72);
+  animation: star-twinkle var(--dur, 2.8s) ease-in-out infinite,
+             star-drift    var(--dur, 2.8s) ease-in-out infinite;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.loader__star svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .loader__role {

@@ -20,27 +20,45 @@
 .footer__links {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
-.footer__icon-link {
-  display: flex;
+/* ── Expanding social button ── */
+.footer__social {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+  overflow: hidden;
+  padding: 9px 16px;
+  border-radius: 100px;
   border: 1px solid var(--gray-800);
   color: var(--gray-500);
-  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  white-space: nowrap;
+  transition: color 0.22s ease, border-color 0.22s ease, background 0.22s ease;
 }
-.footer__icon-link:hover {
+.footer__social:hover {
   color: #fff;
   border-color: var(--gray-600);
   background: var(--gray-900);
 }
 
+.footer__social-icon {
+  flex-shrink: 0;
+}
+
+.footer__social-label {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 10px;
+  letter-spacing: 2.5px;
+}
+
 @media (max-width: 480px) {
   .footer { padding: 24px 20px; }
   .footer__copy { font-size: 10px; letter-spacing: 1.5px; }
+  .footer__social { padding: 8px 13px; }
 }

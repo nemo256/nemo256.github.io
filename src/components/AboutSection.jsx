@@ -37,10 +37,14 @@ const fadeUp = {
   hidden: { opacity: 0, y: 28 },
   show:   { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } }
 };
+const fadeUpScale = {
+  hidden: { opacity: 0, y: 24, scale: 0.88 },
+  show:   { opacity: 1, y: 0, scale: 1, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } }
+};
 
 export default function AboutSection() {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-80px' });
+  const inView = useInView(ref, { once: false, margin: '-80px' });
 
   return (
     <div className="about">
@@ -53,7 +57,7 @@ export default function AboutSection() {
       >
         {/* Left — text */}
         <div className="about__left">
-          <motion.h2 className="about__heading" variants={fadeUp}>
+          <motion.h2 className="about__heading" variants={fadeUpScale}>
             FULL-STACK<br />
             <span className="about__heading-accent">DEVELOPER.</span>
           </motion.h2>
