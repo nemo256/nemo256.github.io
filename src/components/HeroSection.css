@@ -48,7 +48,7 @@
 .hero__title {
   font-family: var(--font-display);
   font-size: clamp(42px, 7vw, 64px);
-  font-weight: 400;
+  font-weight: 900;
   line-height: 1;
   letter-spacing: 4px;
   color: var(--gray-500);
@@ -64,27 +64,21 @@
   display: inline-block;
 }
 
-/* Shimmer sweep across LAMINE */
+/* LAMINE — plain white, TextScramble handles the animation */
 .hero__lamine-text {
   display: inline-block;
-  background: linear-gradient(
-    105deg,
-    #ffffff  0%,
-    #c8c8c8  20%,
-    #ffffff  35%,
-    #ffffff  50%,
-    #d8d8d8  65%,
-    #ffffff  80%,
-    #ffffff  100%
-  );
-  background-size: 300% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: lamine-shimmer 4s linear infinite;
+  color: #fff;
   letter-spacing: inherit;
-  /* Subtle text-shadow for depth — works alongside clip */
-  filter: drop-shadow(0 0 12px rgba(255,255,255,0.18));
+}
+
+/* NEGGAZI — same */
+.hero__neggazi-text {
+  display: inline-block;
+  color: #fff;
+  letter-spacing: inherit;
+  font-family: inherit;
+  font-weight: inherit;
+  font-size: inherit;
 }
 
 /* Diamond star dots */
@@ -121,7 +115,7 @@
   display: inline-block;
   margin-left: 2px;
   color: #fff;
-  font-weight: 100;
+  font-weight: 300;
   animation: blink 1s step-end infinite;
 }
 @keyframes blink {
@@ -167,7 +161,7 @@
 @media (max-width: 480px) {
   .hero { padding: 90px 20px 70px; min-height: 100svh; }
   .hero__content { gap: 18px; }
-  .hero__avatar-ring { width: 310px; height: 310px; border-width: 2px; }
+  .hero__avatar-ring { width: 160px; height: 160px; border-width: 2px; }
   .hero__title { font-size: clamp(30px, 11vw, 52px); letter-spacing: 1px; }
   .hero__subtitle { font-size: clamp(16px, 5.5vw, 28px); letter-spacing: 3px; }
   .hero__cta { padding: 13px 36px; font-size: 24px; letter-spacing: 5px; }

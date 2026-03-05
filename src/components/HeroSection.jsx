@@ -2,6 +2,7 @@
 import memoji from '../assets/memoji.png';
 import { useState, useEffect, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
+import { TextScramble } from './ui/text-scramble.jsx';
 import './HeroSection.css';
 
 const WHATSAPP_URL = `https://wa.me/213794696605`;
@@ -22,7 +23,7 @@ const item = {
   show:   { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } }
 };
 
-/* ── Diamond star shape ── */
+/* Diamond star */
 function StarDot({ style }) {
   return (
     <span className="hero__star" style={style}>
@@ -33,37 +34,73 @@ function StarDot({ style }) {
   );
 }
 
-/* Star positions + timing */
 const STARS = [
-  { top: '-14px', left:  '6%',  size: 7,  delay: 0,    dur: 2.8 },
-  { top: '-6px',  left:  '28%', size: 4,  delay: 0.55, dur: 2.2 },
-  { top: '-16px', left:  '58%', size: 9,  delay: 1.1,  dur: 3.1 },
-  { top:  '8px',  left:  '88%', size: 5,  delay: 0.3,  dur: 2.5 },
-  { top:  '55%',  left: '-14px',size: 6,  delay: 0.75, dur: 2.9 },
-  { top:  '70%',  left:  '96%', size: 4,  delay: 1.4,  dur: 2.3 },
-  { top: '108%',  left:  '18%', size: 5,  delay: 0.2,  dur: 2.7 },
-  { top: '105%',  left:  '72%', size: 7,  delay: 0.9,  dur: 3.0 },
+  { top: '-14px', left: '6%',   size: 7, delay: 0,    dur: 2.8 },
+  { top: '-6px',  left: '28%',  size: 4, delay: 0.55, dur: 2.2 },
+  { top: '-16px', left: '58%',  size: 9, delay: 1.1,  dur: 3.1 },
+  { top: '8px',   left: '88%',  size: 5, delay: 0.3,  dur: 2.5 },
+  { top: '55%',   left: '-14px',size: 6, delay: 0.75, dur: 2.9 },
+  { top: '70%',   left: '96%',  size: 4, delay: 1.4,  dur: 2.3 },
+  { top: '108%',  left: '18%',  size: 5, delay: 0.2,  dur: 2.7 },
+  { top: '105%',  left: '72%',  size: 7, delay: 0.9,  dur: 3.0 },
 ];
 
-/* ── LAMINE with shimmer + stars ── */
+/* LAMINE with scramble on mount + stars */
 function LamineName() {
+  const [trigger, setTrigger] = useState(false);
+
+  // Fire scramble once after a short delay on mount
+  useEffect(() => {
+    const t = setTimeout(() => setTrigger(true), 600);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <span className="hero__lamine-wrap">
       {STARS.map((s, i) => (
-        <StarDot
-          key={i}
-          style={{
-            top: s.top,
-            left: s.left,
-            width: `${s.size}px`,
-            height: `${s.size}px`,
-            animationDelay: `${s.delay}s`,
-            animationDuration: `${s.dur}s`,
-          }}
-        />
+        <StarDot key={i} style={{
+          top: s.top, left: s.left,
+          width: `${s.size}px`, height: `${s.size}px`,
+          animationDelay: `${s.delay}s`,
+          animationDuration: `${s.dur}s`,
+        }} />
       ))}
-      <span className="hero__lamine-text">LAMINE</span>
+      <TextScramble
+        as="span"
+        className="hero__lamine-text"
+        trigger={trigger}
+        speed={0.04}
+        duration={0.9}
+        characterSet="ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&*"
+        onScrambleComplete={() => setTrigger(false)}
+      >
+        LAMINE
+      </TextScramble>
     </span>
+  );
+}
+
+/* NEGGAZI with scramble on mount */
+function NeggaziName() {
+  const [trigger, setTrigger] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setTrigger(true), 900);
+    return () => clearTimeout(t);
+  }, []);
+
+  return (
+    <TextScramble
+      as="span"
+      className="hero__neggazi-text"
+      trigger={trigger}
+      speed={0.04}
+      duration={0.9}
+      characterSet="ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&*"
+      onScrambleComplete={() => setTrigger(false)}
+    >
+      NEGGAZI
+    </TextScramble>
   );
 }
 
@@ -144,7 +181,7 @@ export default function HeroSection() {
         <motion.h1 className="hero__title" variants={item}>
           HI, MY NAME IS<br />
           <span className="hero__title-name">
-            <LamineName /> NEGGAZI
+            <LamineName /> <NeggaziName />
           </span>
         </motion.h1>
 

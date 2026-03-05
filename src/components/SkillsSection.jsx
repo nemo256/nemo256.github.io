@@ -1,4 +1,4 @@
-/* SkillsSection.jsx */
+/* SkillsSection.jsx — Hacker animated entrance + continuous subtle motion */
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import './SkillsSection.css';
@@ -11,31 +11,41 @@ const CATEGORIES = [
   { label: 'DEVOPS & TOOLS',         items: ['GIT', 'DOCKER', 'LINUX', 'BASH', 'FIGMA'] },
 ];
 
-const pillAnim = {
-  hidden: { opacity: 0, scale: 0.82, y: 10 },
-  show:   { opacity: 1, scale: 1,    y: 0,  transition: { duration: 0.42, ease: [0.16, 1, 0.3, 1] } },
-};
+function SkillPill({ item, index, inView }) {
+  /* Each pill has a unique float phase derived from its position */
+  const floatDelay  = (index * 0.37) % 3;
+  const floatDur    = 2.4 + (index * 0.23) % 1.4;
 
-function SkillPill({ item }) {
   return (
     <motion.span
       className="skills__pill"
-      variants={pillAnim}
-      whileHover="hovered"
+      /* Entrance: scale + scan reveal staggered */
+      initial={{ opacity: 0, scale: 0.7, y: 14 }}
+      animate={inView
+        ? { opacity: 1, scale: 1, y: 0 }
+        : { opacity: 0, scale: 0.7, y: 14 }}
+      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1], delay: index * 0.05 }}
+      whileHover={{ scale: 1.1, y: -3, boxShadow: '0 0 20px rgba(255,255,255,0.12)' }}
       whileTap={{ scale: 0.95 }}
-      style={{ position: 'relative' }}
+      style={{ position: 'relative', display: 'inline-flex' }}
     >
-      {/* Border beam on hover only via CSS opacity */}
-      <BorderBeam duration={6} size={100} />
-      <motion.span
-        className="skills__pill-inner"
-        variants={{
-          hovered: { letterSpacing: '3.5px' },
+      {/* Continuous floating after entrance (CSS animation) */}
+      <span
+        className="skills__pill-float"
+        style={{
+          animationDelay: `${floatDelay}s`,
+          animationDuration: `${floatDur}s`,
         }}
-        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
       >
-        {item}
-      </motion.span>
+        <BorderBeam duration={6} size={100} />
+        <motion.span
+          className="skills__pill-inner"
+          variants={{ hovered: { letterSpacing: '3.5px' } }}
+          whileHover="hovered"
+          transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}>
+          {item}
+        </motion.span>
+      </span>
     </motion.span>
   );
 }
@@ -43,35 +53,34 @@ function SkillPill({ item }) {
 function Category({ label, items, inView }) {
   return (
     <div className="skills__cat">
-      <span className="skills__cat-label">{label}</span>
-      <motion.div
-        className="skills__cat-pills"
-        initial="hidden"
-        animate={inView ? 'show' : 'hidden'}
-        variants={{ show: { transition: { staggerChildren: 0.07 } }, hidden: { transition: { staggerChildren: 0.03 } } }}
-      >
-        {items.map((item) => <SkillPill key={item} item={item} />)}
-      </motion.div>
+      <motion.span className="skills__cat-label"
+        initial={{ opacity: 0, x: -20 }}
+        animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}>
+        {label}
+      </motion.span>
+      <div className="skills__cat-pills">
+        {items.map((item, i) => (
+          <SkillPill key={item} item={item} index={i} inView={inView} />
+        ))}
+      </div>
     </div>
   );
 }
 
 export default function SkillsSection() {
-  const ref       = useRef(null);
-  /* once:false = re-animates on scroll back up */
-  const inView    = useInView(ref, { once: false, margin: '-80px' });
-  const headerRef = useRef(null);
+  const ref          = useRef(null);
+  const inView       = useInView(ref, { once: false, margin: '-80px' });
+  const headerRef    = useRef(null);
   const headerInView = useInView(headerRef, { once: false, margin: '-80px' });
 
   return (
     <div className="skills" id="skills" ref={ref}>
       <div className="skills__header" ref={headerRef}>
-        <motion.h2
-          className="skills__heading"
+        <motion.h2 className="skills__heading"
           initial={{ opacity: 0, scale: 0.88, y: 24 }}
           animate={headerInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.88, y: 24 }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        >
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}>
           TOOLS &amp;<br />
           <span className="skills__heading-accent">TECHNOLOGIES</span>
         </motion.h2>

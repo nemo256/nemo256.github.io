@@ -1,4 +1,20 @@
-.exp {
+/* ExperienceSection.css
+   The rail line and dot column must be pixel-perfectly aligned.
+   
+   Layout inside .tl__body:
+   ┌──────────────────────────────────────────────┐
+   │  [dot-col: DOT_COL_W px]  [card content]     │
+   │       │                                       │
+   │   ← DOT_COL_W/2 →                           │
+   │       │  ← rail / live-line centred here      │
+   └──────────────────────────────────────────────┘
+   
+   DOT_COL_W = 36px  →  rail left = 18px from .tl__body left edge
+   (before the body's own padding-left which is 0)
+*/
+
+/* ── Section wrapper ── */
+.tl-section {
   padding: var(--section-py) var(--section-px);
   border-top: 1px solid var(--gray-800);
   position: relative;
@@ -8,161 +24,215 @@
   align-items: center;
 }
 
-.exp__header {
-  width: 100%;
-  max-width: 1100px;
-  margin-bottom: 72px;
-  text-align: center;
-  will-change: transform, opacity;
-}
-
-.exp__heading {
-  font-family: var(--font-display);
-  font-size: clamp(60px, 10vw, 130px);
-  font-weight: 400;
-  line-height: 1;
-  letter-spacing: 4px;
-  color: var(--gray-700);
-  text-transform: uppercase;
-}
-.exp__heading-accent { color: #fff; }
-
-.exp__list {
+.tl__header {
   width: 100%;
   max-width: 860px;
-  display: flex;
-  flex-direction: column;
+  margin-bottom: 88px;
+  text-align: center;
 }
 
-/* ── Entry row ── */
-.exp__entry {
-  display: grid;
-  grid-template-columns: 180px 32px 1fr;
-  padding: 52px 0;
-  border-top: 1px solid var(--gray-800);
-  align-items: start;
-  transition: background 0.2s ease;
-  will-change: transform, opacity;
-}
-.exp__entry:last-child { border-bottom: 1px solid var(--gray-800); }
-.exp__entry:hover { background: rgba(255,255,255,0.013); }
-.exp__entry:hover .exp__dot { border-color: #fff; background: #fff; }
-
-/* ── Left column — type + date ── */
-.exp__entry-left {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding-right: 16px;
-  padding-top: 4px;
-}
-
-.exp__type {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 2.5px;
-  color: var(--gray-700);
+.tl__heading {
+  font-family: var(--font-display);
+  font-size: clamp(54px, 10vw, 130px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 6px;
+  color: var(--gray-800);
   text-transform: uppercase;
 }
+.tl__heading-accent { color: #fff; }
 
-/* Bigger, highlighted date */
-.exp__period {
-  font-family: var(--font-display);
-  font-size: clamp(22px, 2.8vw, 34px);
-  letter-spacing: 1px;
-  color: var(--gray-400);
-  line-height: 1;
-  transition: color 0.22s ease;
+/* ── Body ── */
+.tl__body {
+  width: 100%;
+  max-width: 800px;
+  position: relative;   /* anchor for absolutely-placed rails */
+  /* items use grid: [dot col | card], the grid is declared on .tl__item */
 }
-.exp__entry:hover .exp__period { color: var(--gray-200); }
 
-/* ── Timeline line + dot ── */
-.exp__entry-line {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-}
-.exp__dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: 1.5px solid var(--gray-600);
-  background: var(--bg);
-  margin-top: 6px;
-  flex-shrink: 0;
-  position: relative;
-  z-index: 1;
-  transition: border-color 0.22s ease, background 0.22s ease;
-}
-.exp__entry-line::after {
-  content: '';
+/* ═══════════════════════════════════════
+   RAIL & LIVE LINE
+   Both are absolute children of .tl__body.
+   left = 18px  (= DOT_COL_W/2 = 36/2)
+   The dot is centred in its 36px column, so its centre is also at 18px.
+   ═══════════════════════════════════════ */
+.tl__rail,
+.tl__live-line {
   position: absolute;
-  top: 22px;
-  bottom: -52px;
-  width: 1px;
+  top: 0;
+  bottom: 0;
+  left: 18px;                 /* centre of the 36px dot column */
+  width: 2px;
+  transform: translateX(-50%);
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.tl__rail {
   background: var(--gray-800);
 }
-.exp__entry:last-child .exp__entry-line::after { display: none; }
 
-/* ── Right column — content ── */
-.exp__entry-right {
-  padding-left: 28px;
+.tl__live-line {
+  background: linear-gradient(
+    to bottom,
+    #ffffff 0%,
+    rgba(255,255,255,0.7) 50%,
+    rgba(255,255,255,0.0) 100%
+  );
+  box-shadow:
+    0 0 16px rgba(255,255,255,0.55),
+    0 0 4px  rgba(255,255,255,0.95);
+  z-index: 1;
+  will-change: transform;
+}
+
+/* ── Item row ── */
+.tl__item {
+  position: relative;
+  display: grid;
+  /* column 1 = dot column (36px), column 2 = card */
+  grid-template-columns: 36px 1fr;
+  gap: 0 28px;
+  padding-bottom: 64px;
+  z-index: 2;               /* above the rail */
+}
+.tl__item:last-child { padding-bottom: 0; }
+
+/* ── Dot column ──
+   The dot must sit horizontally centred in its 36px column.
+   Vertically it aligns to the top of the meta row (badge + date). */
+.tl__dot-col {
+  display: flex;
+  justify-content: center;  /* horizontal centre in the 36px column */
+  padding-top: 7px;         /* nudge to align with badge centre */
+}
+
+.tl__dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 3;
+}
+.tl__dot--work {
+  background: #fff;
+  box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px rgba(255,255,255,0.45);
+}
+.tl__dot--cert {
+  background: var(--gray-200);
+  box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px rgba(189,189,189,0.35);
+}
+.tl__dot--edu {
+  background: var(--gray-500);
+  box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px rgba(97,97,97,0.3);
+}
+
+/* ── Card ── */
+.tl__card {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 11px;
+  padding-top: 2px;
 }
 
-.exp__role {
-  font-family: var(--font-body);
-  font-size: clamp(20px, 2.5vw, 28px);
-  font-weight: 800;
-  color: #fff;
-  line-height: 1.2;
-  letter-spacing: 0.2px;
+.tl__card-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
 }
 
-.exp__org {
+/* BADGE — large, strong, bold pill */
+.tl__badge {
   font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 2.5px;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  padding: 7px 18px;
+  border-radius: 100px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.tl__badge--work {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  border: 2px solid rgba(255,255,255,0.45);
+}
+.tl__badge--cert {
+  background: rgba(189,189,189,0.1);
+  color: var(--gray-100);
+  border: 2px solid rgba(189,189,189,0.35);
+}
+.tl__badge--edu {
+  background: rgba(117,117,117,0.1);
+  color: var(--gray-300);
+  border: 2px solid rgba(117,117,117,0.3);
+}
+
+/* Period */
+.tl__period {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2.6vw, 30px);
+  font-weight: 900;
+  letter-spacing: 3px;
   color: var(--gray-500);
+  line-height: 1;
+}
+
+/* Role — dominant */
+.tl__role {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 3.2vw, 40px);
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #fff;
+  line-height: 1.1;
   text-transform: uppercase;
 }
 
-.exp__desc {
-  font-family: var(--font-body);
-  font-size: clamp(13px, 1.3vw, 15px);
-  font-weight: 500;
+/* Org */
+.tl__org {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 3.5px;
   color: var(--gray-600);
-  line-height: 1.7;
-  margin-top: 4px;
+  text-transform: uppercase;
+}
+
+/* Desc */
+.tl__desc {
+  font-family: var(--font-mono);
+  font-size: clamp(11px, 1.2vw, 13px);
+  font-weight: 700;
+  color: var(--gray-600);
+  line-height: 1.9;
+  max-width: 560px;
 }
 
 /* ══ Tablet ══ */
 @media (max-width: 900px) {
-  .exp__entry { grid-template-columns: 140px 24px 1fr; padding: 40px 0; }
-  .exp__heading { letter-spacing: 2px; }
+  .tl__heading { letter-spacing: 3px; }
+  .tl__body { max-width: 680px; }
+  /* DOT_COL_W = 30px → rail left = 15px */
+  .tl__rail, .tl__live-line { left: 15px; }
+  .tl__item { grid-template-columns: 30px 1fr; }
+  .tl__dot { width: 12px; height: 12px; }
 }
 
 /* ══ Mobile ══ */
 @media (max-width: 640px) {
-  .exp { padding: 64px 20px; }
-  .exp__header { margin-bottom: 48px; }
-  .exp__heading { font-size: clamp(48px, 15vw, 80px); letter-spacing: 1px; }
-  .exp__entry { grid-template-columns: 1fr; gap: 10px; padding: 28px 0; }
-  .exp__entry-line { display: none; }
-  .exp__entry-left { flex-direction: row; align-items: center; gap: 12px; padding: 0; }
-  .exp__type {
-    font-size: 8px;
-    letter-spacing: 2px;
-    color: var(--gray-600);
-    background: var(--gray-800);
-    padding: 3px 8px;
-    border-radius: 100px;
-  }
-  .exp__period { font-size: clamp(18px, 6vw, 24px); }
-  .exp__entry-right { padding-left: 0; }
-  .exp__desc { font-size: 13px; }
+  .tl-section { padding: 64px 20px; }
+  .tl__header { margin-bottom: 52px; }
+  .tl__heading { font-size: clamp(44px, 13vw, 72px); letter-spacing: 1px; }
+  /* DOT_COL_W = 24px → rail left = 12px */
+  .tl__rail, .tl__live-line { left: 12px; }
+  .tl__item { grid-template-columns: 24px 1fr; gap: 0 18px; padding-bottom: 44px; }
+  .tl__dot { width: 10px; height: 10px; }
+  .tl__dot-col { padding-top: 8px; }
+  .tl__role { font-size: clamp(18px, 5.5vw, 26px); }
+  .tl__period { font-size: clamp(15px, 4.5vw, 22px); }
+  .tl__badge { font-size: 9px; padding: 5px 12px; letter-spacing: 2px; }
 }

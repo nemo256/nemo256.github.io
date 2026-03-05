@@ -41,7 +41,7 @@
 .skills__cat-label {
   font-family: var(--font-mono);
   font-size: 10px;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 4px;
   color: var(--gray-600);
   text-transform: uppercase;
@@ -77,7 +77,7 @@
 .skills__pill-inner {
   font-family: var(--font-mono);
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 3px;
   color: var(--gray-300);
   text-transform: uppercase;
@@ -102,4 +102,31 @@
   .skills__heading { font-size: clamp(48px, 15vw, 80px); letter-spacing: 1px; }
   .skills__pill { padding: 9px 18px; }
   .skills__pill-inner { font-size: 10px; letter-spacing: 2px; }
+}
+
+/* ── Float wrapper — continuous motion ── */
+.skills__pill-float {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  animation: skill-float var(--dur, 2.8s) ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+  padding: 11px 22px;
+  border-radius: 100px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.12);
+  transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.skills__pill {
+  /* Override existing pill styling — float wrapper handles the visuals */
+  padding: 0;
+  background: none;
+  border: none;
+  overflow: visible;
+}
+.skills__pill:hover .skills__pill-float {
+  background: rgba(255,255,255,0.09);
+  border-color: rgba(255,255,255,0.3);
+  box-shadow: 0 0 18px rgba(255,255,255,0.07);
 }

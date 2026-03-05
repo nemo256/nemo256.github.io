@@ -1,6 +1,6 @@
-/* ============================================
-   GLOBAL STYLES — LAMINE NEGGAZI PORTFOLIO
-   ============================================ */
+/* global.css — ULTRA BOLD HACKER */
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,700;0,800;1,700;1,800&family=Space+Mono:wght@400;700&display=swap');
 
 :root {
   --bg: #000000;
@@ -15,13 +15,9 @@
   --gray-800: #212121;
   --gray-900: #111111;
 
-  --font-display: 'Bebas Neue', sans-serif;
-  --font-body: 'Syne', sans-serif;
-  --font-mono: 'Space Mono', monospace;
-
-  --transition-fast: 0.2s ease;
-  --transition-mid: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-slow: 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  --font-display: 'JetBrains Mono', 'Space Mono', monospace;
+  --font-body:    'JetBrains Mono', 'Space Mono', monospace;
+  --font-mono:    'JetBrains Mono', 'Space Mono', monospace;
 
   --section-px: clamp(20px, 5vw, 80px);
   --section-py: clamp(80px, 10vh, 140px);
@@ -29,97 +25,63 @@
 
 *, *::before, *::after {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+  margin: 0; padding: 0;
   -webkit-user-select: none;
-  -moz-user-select: none;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+  font-weight: 800;          /* BOLD by default everywhere */
 }
 
-html {
-  scroll-behavior: smooth;
-  width: 100%;
-}
+html { scroll-behavior: smooth; width: 100%; }
 
 body, #root {
   width: 100%;
   min-height: 100dvh;
   overflow-x: hidden;
 }
-
-@supports not (height: 100dvh) {
-  body, #root { min-height: 100vh; }
-}
+@supports not (height: 100dvh) { body, #root { min-height: 100vh; } }
 
 body {
   background-color: var(--bg);
   color: var(--text);
   font-family: var(--font-body);
+  font-weight: 800;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
 }
 
-/* Desktop: hide system cursor */
 @media (hover: hover) and (pointer: fine) {
   body, *, *::before, *::after { cursor: none !important; }
 }
-
-/* Touch devices: restore auto cursor */
 @media (hover: none), (pointer: coarse) {
   body, *, *::before, *::after { cursor: auto !important; }
 }
 
-button {
-  border: none;
-  background: none;
-  color: inherit;
-  font-family: inherit;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
+button { border: none; background: none; color: inherit; font-family: inherit; font-weight: 800; }
+a { color: inherit; text-decoration: none; font-weight: inherit; }
 
 ::-webkit-scrollbar { width: 2px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--gray-700); border-radius: 1px; }
 
-/* ═══════════════════════════════════════════
-   ANIMATIONS
-   ═══════════════════════════════════════════ */
+/* ── Animations ── */
+@keyframes border-beam-travel { 0% { offset-distance: 0%; } 100% { offset-distance: 100%; } }
 
-/* Border beam travel */
-@keyframes border-beam-travel {
-  0%   { offset-distance: 0%; }
-  100% { offset-distance: 100%; }
-}
-
-/* LAMINE shimmer — sweeping light across the name */
 @keyframes lamine-shimmer {
-  0%   { background-position: -200% center; }
-  100% { background-position: 200% center; }
+  0%   { background-position: -300% center; }
+  100% { background-position: 300% center; }
 }
 
-/* Star twinkle */
 @keyframes star-twinkle {
   0%, 100% { opacity: 0.1;  transform: scale(0.7) rotate(0deg); }
   33%       { opacity: 0.9;  transform: scale(1.3) rotate(45deg); }
   66%       { opacity: 0.35; transform: scale(0.9) rotate(90deg); }
 }
-
-/* Star drift — subtle upward float */
 @keyframes star-drift {
   0%   { transform: translateY(0px) scale(1); }
   50%  { transform: translateY(-4px) scale(1.1); }
   100% { transform: translateY(0px) scale(1); }
 }
-
-/* Pulse ring around LAMINE */
-@keyframes lamine-ring-pulse {
-  0%   { box-shadow: 0 0 0 0px rgba(255,255,255,0.18); }
-  70%  { box-shadow: 0 0 0 8px rgba(255,255,255,0); }
-  100% { box-shadow: 0 0 0 0px rgba(255,255,255,0); }
+@keyframes skill-float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-4px); }
 }
