@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Github, Linkedin } from 'lucide-react';
 
 const GITHUB_URL   = 'https://github.com/nemo256';
-const LINKEDIN_URL = 'https://linkedin.com/in/lamine-neggazi';
+const LINKEDIN_URL = 'https://www.linkedin.com/in/n3m033/';
 
 const LINKS = [
   { href: GITHUB_URL,   icon: Github,   label: 'GITHUB'   },
