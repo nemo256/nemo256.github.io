@@ -219,13 +219,14 @@
    DRAWER (mobile menu)
    ═══════════════════════════════ */
 .drawer {
-  position: fixed; inset: 0;
+  position: fixed;
+  top: 58px;   /* sit exactly below the 58px mobile navbar */
+  left: 0; right: 0; bottom: 0;
   background: var(--bg);
-  z-index: 250;
+  z-index: 299; /* below nav (300) so nav stays on top, above everything else */
   display: flex; align-items: center; justify-content: center;
-  max-height: 100vh;
   overflow-y: auto;
-  padding: 80px 0 40px; /* top padding clears the navbar */
+  padding: 24px 0 40px;
 }
 .drawer__nav {
   display: flex;
@@ -318,8 +319,13 @@
   .topnav__slot-left, .topnav__slot-center, .topnav__slot-right { height: 100%; display: flex; align-items: center; }
   .topnav__slot-center { justify-content: center; }
   .topnav__slot-right  { justify-content: flex-end; }
-  .topnav__logo-l, .topnav__logo-n, .topnav__logo-amine, .topnav__logo-eggazi { font-size: 30px; }
+  /* LN — a notch bigger than the icons */
+  .topnav__logo-l, .topnav__logo-n, .topnav__logo-amine, .topnav__logo-eggazi { font-size: 36px; }
   .topnav__logo-hitzone { padding: 8px 12px; margin: -8px -12px; }
   .topnav__mobile-left { gap: 2px; }
   .topnav__theme-btn { width: 34px; height: 34px; }
+  /* CV icon container — match burger touch target */
+  .topnav__cv-icon-only { width: 44px; height: 44px; }
+  /* Burger bars — 24px to match DocIcon svg */
+  .topnav__burger-bar { width: 24px; }
 }

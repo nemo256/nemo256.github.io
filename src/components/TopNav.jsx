@@ -244,7 +244,7 @@ function ResumeButton({ isMobile }) {
     return (
       <a href={URL} target="_blank" rel="noreferrer"
         className="topnav__cv-icon-only" aria-label="Resume" download>
-        <DocIcon size={19} />
+        <DocIcon size={24} />
       </a>
     );
   }
