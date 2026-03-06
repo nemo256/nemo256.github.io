@@ -220,13 +220,17 @@
    ═══════════════════════════════ */
 .drawer {
   position: fixed;
-  top: 58px;   /* sit exactly below the 58px mobile navbar */
+  top: 58px;
   left: 0; right: 0; bottom: 0;
   background: var(--bg);
-  z-index: 299; /* below nav (300) so nav stays on top, above everything else */
-  display: flex; align-items: center; justify-content: center;
+  z-index: 299;
   overflow-y: auto;
-  padding: 24px 0 40px;
+  overflow-x: hidden;
+  /* Use block layout so content can scroll — not flex centering */
+  display: block;
+  padding: 16px 0 48px;
+  /* Momentum scrolling on iOS */
+  -webkit-overflow-scrolling: touch;
 }
 .drawer__nav {
   display: flex;
@@ -235,18 +239,22 @@
   width: 100%;
   padding: 0 32px;
   gap: 0;
+  /* Min height fills drawer so theme pill sits at bottom on tall screens */
+  min-height: 100%;
+  justify-content: center;
 }
 .drawer__link {
   font-family: var(--font-display);
-  font-size: clamp(36px, 10vw, 68px);
+  font-size: clamp(28px, 8vw, 56px);
   font-weight: 900; letter-spacing: 5px;
   color: var(--gray-600); text-transform: uppercase;
   transition: color 0.2s, transform 0.2s;
-  padding: 12px 0;
+  padding: 10px 0;
   text-align: center;
   width: 100%;
-  /* Thin divider between each item */
   border-bottom: 1px solid var(--gray-800);
+  /* Prevent text from being cut */
+  flex-shrink: 0;
 }
 .drawer__link:first-child { border-top: 1px solid var(--gray-800); }
 .drawer__link:hover { color: var(--text); transform: translateX(6px); }
@@ -256,7 +264,8 @@
   width: 40px;
   height: 1px;
   background: var(--gray-700);
-  margin: 32px auto 28px;
+  margin: 24px auto 20px;
+  flex-shrink: 0;
 }
 
 /* Theme toggle row — pill style */
@@ -264,6 +273,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 /* Pill-style drawer toggle */
 .topnav__theme-btn--drawer {
@@ -295,11 +305,13 @@
   flex-shrink: 0;
 }
 
-@media (max-height: 500px) and (orientation: landscape) {
-  .drawer__link { font-size: clamp(20px, 6vw, 36px); padding: 8px 0; }
-  .drawer__separator { margin: 16px auto 14px; }
+/* Landscape on small screens — compact everything so all items fit / scroll */
+@media (max-height: 500px) {
+  .drawer { padding: 8px 0 24px; }
+  .drawer__link { font-size: clamp(18px, 5vh, 28px); padding: 6px 0; letter-spacing: 3px; }
+  .drawer__separator { margin: 10px auto 8px; }
+  .topnav__theme-btn--drawer { padding: 8px 20px; font-size: 10px; }
 }
-
 /* ═══════════════════════════════
    RESPONSIVE
    ═══════════════════════════════ */
