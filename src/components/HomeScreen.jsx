@@ -95,7 +95,7 @@ export default function HomeScreen() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        whileHover={{ color: '#fff' }}
+        whileHover={{ color: 'var(--text)' }}
       >
         <span className="home__email-label">
           {copied ? (

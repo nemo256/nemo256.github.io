@@ -76,12 +76,12 @@
   pointer-events: none;
 }
 .carousel__zone:hover .carousel__zone-hint {
-  color: rgba(255,255,255,0.55);
+  color: rgba(128,128,128,0.55);
 }
 
 /* Also show hints on touch (active state) */
 .carousel__zone:active .carousel__zone-hint {
-  color: rgba(255,255,255,0.45);
+  color: rgba(128,128,128,0.45);
 }
 
 /* Dots */
@@ -104,7 +104,7 @@
   transition: background 0.2s ease, transform 0.2s ease;
 }
 .carousel__dot.active {
-  background: #fff;
+  background: var(--text);
   transform: scale(1.3);
 }
 

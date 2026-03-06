@@ -1,8 +1,7 @@
-/* SkillsSection.jsx — Hacker animated entrance + continuous subtle motion */
+/* SkillsSection.jsx */
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import './SkillsSection.css';
-import { BorderBeam } from './ui/border-beam.jsx';
 
 const CATEGORIES = [
   { label: 'LANGUAGES',              items: ['JAVASCRIPT', 'PYTHON', 'C', 'C++'] },
@@ -12,40 +11,18 @@ const CATEGORIES = [
 ];
 
 function SkillPill({ item, index, inView }) {
-  /* Each pill has a unique float phase derived from its position */
-  const floatDelay  = (index * 0.37) % 3;
-  const floatDur    = 2.4 + (index * 0.23) % 1.4;
-
   return (
     <motion.span
       className="skills__pill"
-      /* Entrance: scale + scan reveal staggered */
       initial={{ opacity: 0, scale: 0.7, y: 14 }}
       animate={inView
         ? { opacity: 1, scale: 1, y: 0 }
         : { opacity: 0, scale: 0.7, y: 14 }}
       transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1], delay: index * 0.05 }}
-      whileHover={{ scale: 1.1, y: -3, boxShadow: '0 0 20px rgba(255,255,255,0.12)' }}
+      whileHover={{ scale: 1.08, y: -3 }}
       whileTap={{ scale: 0.95 }}
-      style={{ position: 'relative', display: 'inline-flex' }}
     >
-      {/* Continuous floating after entrance (CSS animation) */}
-      <span
-        className="skills__pill-float"
-        style={{
-          animationDelay: `${floatDelay}s`,
-          animationDuration: `${floatDur}s`,
-        }}
-      >
-        <BorderBeam duration={6} size={100} />
-        <motion.span
-          className="skills__pill-inner"
-          variants={{ hovered: { letterSpacing: '3.5px' } }}
-          whileHover="hovered"
-          transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}>
-          {item}
-        </motion.span>
-      </span>
+      <span className="skills__pill-inner">{item}</span>
     </motion.span>
   );
 }

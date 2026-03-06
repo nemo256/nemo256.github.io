@@ -55,15 +55,19 @@ export default function ParticleBackground() {
     const GRID = 60;
     let tick = 0;
 
+    const isLight = () => document.documentElement.getAttribute('data-theme') === 'light';
+
     const draw = () => {
       tick++;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const W = canvas.width;
       const H = canvas.height;
+      const light = isLight();
+      const c = light ? '0,0,0' : '255,255,255';
 
       // Grid
-      ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+      ctx.strokeStyle = `rgba(${c},0.04)`;
       ctx.lineWidth = 1;
       for (let x = 0; x <= W; x += GRID) {
         ctx.beginPath();
@@ -84,9 +88,9 @@ export default function ParticleBackground() {
         const ex = b.x + Math.cos(b.angle) * b.length;
         const ey = b.y + Math.sin(b.angle) * b.length;
         const grad = ctx.createLinearGradient(b.x, b.y, ex, ey);
-        grad.addColorStop(0, `rgba(255,255,255,0)`);
-        grad.addColorStop(0.5, `rgba(255,255,255,${b.opacity})`);
-        grad.addColorStop(1, `rgba(255,255,255,0)`);
+        grad.addColorStop(0, `rgba(${c},0)`);
+        grad.addColorStop(0.5, `rgba(${c},${b.opacity})`);
+        grad.addColorStop(1, `rgba(${c},0)`);
         ctx.strokeStyle = grad;
         ctx.lineWidth = 1;
         ctx.beginPath();
@@ -114,7 +118,7 @@ export default function ParticleBackground() {
 
         ctx.beginPath();
         ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255,255,255,${n.opacity})`;
+        ctx.fillStyle = `rgba(${c},${n.opacity})`;
         ctx.fill();
       });
 
@@ -125,7 +129,7 @@ export default function ParticleBackground() {
           const dy = nodes[i].y - nodes[j].y;
           const d = Math.sqrt(dx * dx + dy * dy);
           if (d < 150) {
-            ctx.strokeStyle = `rgba(255,255,255,${0.06 * (1 - d / 150)})`;
+            ctx.strokeStyle = `rgba(${c},${0.06 * (1 - d / 150)})`;
             ctx.lineWidth = 0.5;
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
@@ -138,9 +142,9 @@ export default function ParticleBackground() {
       // Scanline pulse
       const scanY = (tick * 0.4) % H;
       const sg = ctx.createLinearGradient(0, scanY - 40, 0, scanY + 40);
-      sg.addColorStop(0, 'rgba(255,255,255,0)');
-      sg.addColorStop(0.5, 'rgba(255,255,255,0.02)');
-      sg.addColorStop(1, 'rgba(255,255,255,0)');
+      sg.addColorStop(0, `rgba(${c},0)`);
+      sg.addColorStop(0.5, `rgba(${c},0.02)`);
+      sg.addColorStop(1, `rgba(${c},0)`);
       ctx.fillStyle = sg;
       ctx.fillRect(0, scanY - 40, W, 80);
 

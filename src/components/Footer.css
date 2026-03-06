@@ -40,7 +40,7 @@
   transition: color 0.22s ease, border-color 0.22s ease, background 0.22s ease;
 }
 .footer__social:hover {
-  color: #fff;
+  color: var(--text);
   border-color: var(--gray-600);
   background: var(--gray-900);
 }

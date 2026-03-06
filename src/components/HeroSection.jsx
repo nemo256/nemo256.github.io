@@ -3,6 +3,9 @@ import memoji from '../assets/memoji.png';
 import { useState, useEffect, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { TextScramble } from './ui/text-scramble.jsx';
+import { BorderBeam } from './ui/border-beam.jsx';
+import AvatarBeam from './AvatarBeam.jsx';
+import { useTheme } from './ThemeContext.jsx';
 import './HeroSection.css';
 
 const WHATSAPP_URL = `https://wa.me/213794696605`;
@@ -149,8 +152,11 @@ function TypingText() {
 }
 
 export default function HeroSection() {
-  const ref    = useRef(null);
-  const inView = useInView(ref, { margin: '-10% 0px -10% 0px' });
+  const ref      = useRef(null);
+  const ringRef  = useRef(null);           // ref to the actual ring div
+  const inView   = useInView(ref, { margin: '-10% 0px -10% 0px' });
+  const { dark } = useTheme();
+  const [beamActive, setBeamActive] = useState(false);
 
   return (
     <div className="hero" ref={ref}>
@@ -161,20 +167,36 @@ export default function HeroSection() {
         animate={inView ? 'show' : 'hidden'}
       >
         {/* Memoji */}
-        <motion.div className="hero__avatar" variants={item} whileHover="hover" whileTap="hover">
-          <motion.div
-            className="hero__avatar-ring"
-            variants={{ hover: { scale: 1.05, borderColor: 'rgba(255,255,255,0.45)' } }}
-            transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <motion.img
-              src={memoji}
-              alt="Lamine NEGGAZI"
-              className="hero__avatar-img"
-              variants={{ hover: { scale: 1.1, y: -10 } }}
-              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-            />
-          </motion.div>
+        <motion.div
+          className="hero__avatar"
+          variants={item}
+          whileHover="hover"
+          whileTap="hover"
+          onHoverStart={() => setBeamActive(true)}
+          onHoverEnd={() => setBeamActive(false)}
+          onTapStart={() => setBeamActive(true)}
+          onTap={() => setTimeout(() => setBeamActive(false), 1000)}
+        >
+          <div className="hero__avatar-beam-wrap">
+            {/* Image ring — in normal flow, centered by flexbox */}
+            <motion.div
+              className="hero__avatar-ring-motion"
+              variants={{ hover: { scale: 1.05 } }}
+              transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <div className="hero__avatar-ring" ref={ringRef}>
+                <motion.img
+                  src={memoji}
+                  alt="Lamine NEGGAZI"
+                  className="hero__avatar-img"
+                  variants={{ hover: { scale: 1.1, y: -10 } }}
+                  transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                />
+              </div>
+            </motion.div>
+            {/* Canvas beam — reads ring size live via ResizeObserver */}
+            <AvatarBeam active={beamActive} dark={dark} ringRef={ringRef} />
+          </div>
         </motion.div>
 
         {/* Main title */}

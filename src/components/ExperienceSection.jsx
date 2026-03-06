@@ -58,14 +58,21 @@ function TimelineItem({ entry }) {
 function LiveLine({ bodyRef }) {
   const { scrollYProgress } = useScroll({
     target: bodyRef,
-    offset: ['start 78%', 'end 22%'],
+    offset: ['start 80%', 'end 20%'],
   });
-  const scaleY = useSpring(scrollYProgress, { stiffness: 55, damping: 16 });
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 60, damping: 20, restDelta: 0.001 });
 
   return (
     <>
       <div className="tl__rail" />
-      <motion.div className="tl__live-line" style={{ scaleY, originY: 0 }} />
+      <motion.div
+        className="tl__live-line"
+        style={{
+          scaleY: smoothProgress,
+          originY: 0,
+          transformOrigin: 'top',
+        }}
+      />
     </>
   );
 }

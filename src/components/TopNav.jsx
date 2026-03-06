@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TextScramble } from './ui/text-scramble.jsx';
+import { useTheme } from './ThemeContext.jsx';
 import './TopNav.css';
 
 const NAV_LINKS = [
@@ -186,9 +187,59 @@ function LogoExpand({ onClick }) {
   );
 }
 
+/* ── Sun / Moon SVG icons ── */
+function SunIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="5" stroke="currentColor" strokeWidth="2.2"/>
+      <line x1="12" y1="2" x2="12" y2="4" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/>
+      <line x1="12" y1="20" x2="12" y2="22" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/>
+      <line x1="2" y1="12" x2="4" y2="12" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/>
+      <line x1="20" y1="12" x2="22" y2="12" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/>
+    </svg>
+  );
+}
+function MoonIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+        stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
+function ThemeToggle({ drawer = false }) {
+  const { dark, toggle } = useTheme();
+  if (drawer) {
+    return (
+      <button
+        className="topnav__theme-btn--drawer"
+        onClick={toggle}
+        aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
+      >
+        {dark ? <MoonIcon /> : <SunIcon />}
+        <span>{dark ? 'DARK MODE' : 'LIGHT MODE'}</span>
+      </button>
+    );
+  }
+  return (
+    <button
+      className="topnav__theme-btn"
+      onClick={toggle}
+      aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
+    >
+      {dark ? <MoonIcon /> : <SunIcon />}
+    </button>
+  );
+}
+
 /* ── Resume: icon only, label on hover ── */
 function ResumeButton({ isMobile }) {
-  const URL = 'assets/cv.pdf';
+  const URL = '/cv.pdf';
   if (isMobile) {
     return (
       <a href={URL} target="_blank" rel="noreferrer"
@@ -294,7 +345,12 @@ export default function TopNav() {
                 <span className="topnav__burger-bar" />
               </button>
             )
-            : <ResumeButton isMobile={false} />
+            : (
+            <div className="topnav__right-group">
+              <ThemeToggle />
+              <ResumeButton isMobile={false} />
+            </div>
+          )
           }
         </div>
       </nav>
@@ -316,6 +372,14 @@ export default function TopNav() {
                   {label}
                 </motion.a>
               ))}
+              {/* Separator + theme toggle pill at bottom */}
+              <div className="drawer__separator" />
+              <motion.div className="drawer__theme-row"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.08 + NAV_LINKS.length * 0.07, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
+                <ThemeToggle drawer />
+              </motion.div>
             </nav>
           </motion.div>
         )}

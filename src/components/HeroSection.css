@@ -24,18 +24,32 @@
 /* ── Avatar ── */
 .hero__avatar { cursor: none; }
 
+.hero__avatar-beam-wrap {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero__avatar-ring-motion {
+  position: relative;
+  z-index: 1;
+  border-radius: 50%;
+  line-height: 0;
+}
+
 .hero__avatar-ring {
   width: 220px;
   height: 220px;
   border-radius: 50%;
-  border: 4px solid rgba(255, 255, 255, 0.18);
   overflow: hidden;
   background: var(--gray-900);
-  transition: border-color 0.35s ease, box-shadow 0.35s ease;
+  display: block;
+  border: 2px solid rgba(128,128,128,0.25);
 }
-.hero__avatar-ring:hover {
-  box-shadow: 0 12px 60px rgba(255,255,255,0.07), 0 0 0 1px rgba(255,255,255,0.1);
-}
+
 .hero__avatar-img {
   width: 100%;
   height: 100%;
@@ -54,7 +68,7 @@
   color: var(--gray-500);
   text-transform: uppercase;
 }
-.hero__title-name { color: #fff; display: block; }
+.hero__title-name { color: var(--text); display: block; }
 
 /* ═══════════════════════════════
    LAMINE — shimmer + star effect
@@ -67,14 +81,14 @@
 /* LAMINE — plain white, TextScramble handles the animation */
 .hero__lamine-text {
   display: inline-block;
-  color: #fff;
+  color: var(--text);
   letter-spacing: inherit;
 }
 
 /* NEGGAZI — same */
 .hero__neggazi-text {
   display: inline-block;
-  color: #fff;
+  color: var(--text);
   letter-spacing: inherit;
   font-family: inherit;
   font-weight: inherit;
@@ -109,14 +123,39 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  white-space: nowrap;
 }
-.hero__typed { display: inline-flex; align-items: center; }
+.hero__typed {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
 .hero__cursor {
   display: inline-block;
   margin-left: 2px;
-  color: #fff;
+  color: var(--text);
   font-weight: 300;
   animation: blink 1s step-end infinite;
+  flex-shrink: 0;
+}
+
+/* Mobile: allow wrapping but keep cursor attached */
+@media (max-width: 480px) {
+  .hero__subtitle {
+    white-space: normal;
+    text-align: center;
+    font-size: clamp(14px, 5vw, 22px);
+    letter-spacing: 3px;
+  }
+  .hero__typed {
+    display: inline;
+    white-space: normal;
+    word-break: break-word;
+  }
+  .hero__cursor {
+    display: inline;
+    margin-left: 1px;
+  }
 }
 @keyframes blink {
   0%, 100% { opacity: 1; }
@@ -129,8 +168,8 @@
   display: inline-flex;
   align-items: center;
   padding: 16px 56px;
-  background: #fff;
-  color: #000;
+  background: var(--text);
+  color: var(--bg);
   border-radius: 100px;
   font-family: var(--font-display);
   font-size: clamp(24px, 3vw, 36px);
@@ -138,12 +177,12 @@
   font-weight: 900;
   text-transform: uppercase;
   animation: cta-pulse 2.4s ease-in-out infinite;
-  box-shadow: 0 0 0 0 rgba(255,255,255,0.4);
+  box-shadow: 0 0 0 0 rgba(128,128,128,0.4);
   transition: background 0.2s ease;
 }
-.hero__cta:hover { background: var(--gray-200); animation-play-state: paused; }
+.hero__cta:hover { background: var(--gray-300); animation-play-state: paused; }
 @keyframes cta-pulse {
-  0%   { box-shadow: 0 0 0 0    rgba(255,255,255,0.25); }
+  0%   { box-shadow: 0 0 0 0    rgba(128,128,128,0.25); }
   50%  { box-shadow: 0 0 0 18px rgba(255,255,255,0); }
   100% { box-shadow: 0 0 0 0    rgba(255,255,255,0); }
 }
@@ -151,7 +190,7 @@
 /* ══ Tablet ══ */
 @media (max-width: 900px) {
   .hero__content { gap: 22px; }
-  .hero__avatar-ring { width: 250px; height: 250px; }
+  .hero__avatar-beam-wrap { width: 260px; height: 260px; } .hero__avatar-ring { width: 260px; height: 260px; }
   .hero__title { font-size: clamp(34px, 8vw, 70px); letter-spacing: 2px; }
   .hero__subtitle { font-size: clamp(18px, 4vw, 36px); letter-spacing: 4px; }
   .hero__cta { padding: 14px 44px; font-size: clamp(22px, 3vw, 30px); }
@@ -161,7 +200,7 @@
 @media (max-width: 480px) {
   .hero { padding: 90px 20px 70px; min-height: 100svh; }
   .hero__content { gap: 18px; }
-  .hero__avatar-ring { width: 160px; height: 160px; border-width: 2px; }
+  .hero__avatar-beam-wrap { width: 170px; height: 170px; } .hero__avatar-ring { width: 170px; height: 170px; }
   .hero__title { font-size: clamp(30px, 11vw, 52px); letter-spacing: 1px; }
   .hero__subtitle { font-size: clamp(16px, 5.5vw, 28px); letter-spacing: 3px; }
   .hero__cta { padding: 13px 36px; font-size: 24px; letter-spacing: 5px; }
@@ -169,6 +208,11 @@
 
 @media (max-height: 600px) and (max-width: 900px) {
   .hero { padding-top: 80px; padding-bottom: 40px; }
-  .hero__avatar-ring { width: 100px; height: 100px; }
+  .hero__avatar-beam-wrap { width: 110px; height: 110px; } .hero__avatar-ring { width: 110px; height: 110px; }
   .hero__content { gap: 10px; }
+}
+
+/* Light mode: make "HI, MY NAME IS" text darker */
+[data-theme="light"] .hero__title {
+  color: var(--gray-300);
 }

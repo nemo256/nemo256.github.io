@@ -197,7 +197,7 @@ export default function ProjectsSection() {
             isButton
             icon={ChevronDown}
             label="SEE MORE"
-            onClick={() => setVisible(v => Math.min(v + PAGE_SIZE, projects.length))}
+            onClick={() => setVisible(v => Math.min(v + 1, projects.length))}
           />
         </div>
       )}

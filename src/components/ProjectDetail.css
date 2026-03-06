@@ -57,7 +57,7 @@
   font-size: clamp(28px, 5vw, 64px);
   letter-spacing: 4px;
   line-height: 1;
-  color: #fff;
+  color: var(--text);
 }
 
 /* ── Tags ────────────────────────────────────────── */
@@ -78,7 +78,7 @@
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 2px;
-  color: #fff;
+  color: var(--text);
   transition: background 0.18s ease;
   cursor: default;
 }
@@ -116,9 +116,9 @@
 }
 
 .detail__pill-link:hover {
-  color: #fff;
+  color: var(--text);
   border-color: var(--gray-400);
-  background: rgba(255,255,255,0.06);
+  background: rgba(128,128,128,0.06);
 }
 
 .detail__pill-icon { flex-shrink: 0; }
@@ -147,7 +147,7 @@
   text-overflow: ellipsis;
 }
 .detail__nav-btn:hover,
-.detail__nav-btn:active { color: #fff; }
+.detail__nav-btn:active { color: var(--text); }
 .detail__nav-btn--next  { flex-direction: row-reverse; }
 
 /* ══════════════════════════════════════════════════

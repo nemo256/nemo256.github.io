@@ -1,7 +1,7 @@
 .loader {
   position: fixed;
   inset: 0;
-  background: #000;
+  background: var(--bg);
   z-index: 1000;
   display: flex;
   flex-direction: column;
@@ -14,12 +14,12 @@
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 2px;
-  background: rgba(255,255,255,0.08);
+  background: rgba(128,128,128,0.08);
   overflow: hidden;
 }
 .loader__bar-fill {
   height: 100%;
-  background: #fff;
+  background: var(--text);
   transition: width 0.5s ease;
 }
 
@@ -53,6 +53,7 @@
   letter-spacing: clamp(8px, 2.5vw, 24px);
   line-height: 0.95;
   will-change: transform, opacity;
+  /* Dark mode shimmer: bright white sweep */
   background: linear-gradient(
     105deg,
     #ffffff  0%,
@@ -68,7 +69,24 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   animation: lamine-shimmer 4s linear infinite;
-  filter: drop-shadow(0 0 16px rgba(255,255,255,0.2));
+  filter: drop-shadow(0 0 16px rgba(128,128,128,0.2));
+}
+/* Light mode shimmer: dark charcoal sweep — matches FULL-STACK / CAREER gray */
+[data-theme="light"] .loader__name-first {
+  background: linear-gradient(
+    105deg,
+    #212121  0%,
+    #616161  18%,
+    #212121  35%,
+    #212121  50%,
+    #424242  68%,
+    #212121  82%,
+    #212121  100%
+  );
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* NEGGAZI */
@@ -77,11 +95,11 @@
   font-family: var(--font-display);
   font-size: clamp(64px, 14vw, 150px);
   letter-spacing: clamp(8px, 2.5vw, 24px);
-  color: #fff;
+  color: var(--text);
   line-height: 0.95;
   will-change: transform, opacity;
   padding-left: clamp(8px, 2.5vw, 24px);
-  -webkit-text-stroke: 1px rgba(255,255,255,0.15);
+  -webkit-text-stroke: 1px rgba(128,128,128,0.15);
 }
 
 /* Diamond star dots on LAMINE */
@@ -94,6 +112,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+[data-theme="light"] .loader__star {
+  color: rgba(0, 0, 0, 0.55);
 }
 .loader__star svg {
   width: 100%;

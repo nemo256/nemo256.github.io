@@ -38,7 +38,7 @@
 }
 
 .home__avatar-ring:hover {
-  box-shadow: 0 8px 48px rgba(255,255,255,0.08), 0 0 0 1px rgba(255,255,255,0.12);
+  box-shadow: 0 8px 48px rgba(128,128,128,0.08), 0 0 0 1px rgba(128,128,128,0.12);
 }
 
 .home__avatar-img {
@@ -61,7 +61,7 @@
 }
 
 .home__title-name {
-  color: #fff;
+  color: var(--text);
   display: block;
 }
 
@@ -93,7 +93,7 @@
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 3px;
-  color: #fff;
+  color: var(--text);
   transition: background 0.2s ease;
 }
 
