@@ -357,11 +357,27 @@
   .proj__card-title { font-size: clamp(26px, 8vw, 40px); letter-spacing: 3px; }
   .proj__card-desc { font-size: 13px; }
   .proj__card-body { padding: 28px 0 0; gap: 16px; }
-  .gallery-overlay { padding: 16px; }
-  .gallery-arrow--left  { left: 6px; }
-  .gallery-arrow--right { right: 6px; }
+
+  /* Gallery overlay — scroll from below navbar */
+  .gallery-overlay {
+    padding: 0;
+    align-items: flex-start;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  /* Backdrop stays fixed so it covers whole screen even when scrolled */
+  .gallery-backdrop { position: fixed; }
+  /* Modal has top margin to clear the 58px navbar + breathing room */
+  .gallery-modal {
+    margin: 72px 16px 40px;
+    width: calc(100% - 32px);
+  }
+  .gallery-img { max-height: 52vh; }
   .gallery-close { top: -10px; right: -6px; width: 32px; height: 32px; font-size: 11px; }
   .gallery-thumb { width: 56px; height: 36px; }
+  .gallery-arrow { width: 34px; height: 34px; }
+  .gallery-arrow--left  { left: 6px; }
+  .gallery-arrow--right { right: 6px; }
 }
 
 /* Light mode gallery overlay */
