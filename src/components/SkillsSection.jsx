@@ -58,8 +58,7 @@ export default function SkillsSection() {
           initial={{ opacity: 0, scale: 0.88, y: 24 }}
           animate={headerInView ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.88, y: 24 }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}>
-          TOOLS &amp;<br />
-          <span className="skills__heading-accent">TECHNOLOGIES</span>
+          <span className="skills__heading-accent">SKILLS</span>
         </motion.h2>
       </div>
 

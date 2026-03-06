@@ -57,7 +57,7 @@
   aspect-ratio: 16 / 9;
   border-radius: 14px;
   overflow: hidden;
-  border: 1px solid var(--gray-800);
+  border: 2px solid var(--gray-800);
   cursor: none;
   transition: border-color 0.3s, box-shadow 0.4s ease, transform 0.4s ease;
   box-shadow:
@@ -148,7 +148,7 @@
   padding: 7px 16px;
   border-radius: 100px;
   background: rgba(128,128,128,0.05);
-  border: 1.5px solid rgba(128,128,128,0.13);
+  border: 2px solid rgba(128,128,128,0.18);
   font-family: var(--font-mono);
   font-size: 10px; font-weight: 900;
   letter-spacing: 2.5px;
@@ -181,7 +181,7 @@
   display: inline-flex;
   align-items: center;
   padding: 10px 18px;
-  border: 1.5px solid rgba(128,128,128,0.22);
+  border: 2px solid rgba(128,128,128,0.28);
   border-radius: 100px;
   color: var(--gray-300);
   background: rgba(128,128,128,0.04);
@@ -264,7 +264,7 @@
   z-index: 10;
   width: 36px; height: 36px;
   display: flex; align-items: center; justify-content: center;
-  border: 1px solid rgba(128,128,128,0.15);
+  border: 2px solid rgba(128,128,128,0.22);
   border-radius: 50%;
   background: rgba(0,0,0,0.7);
   color: var(--gray-500);
@@ -283,7 +283,7 @@
   max-height: 65vh;
   object-fit: contain;
   border-radius: 12px;
-  border: 1px solid var(--gray-800);
+  border: 2px solid var(--gray-800);
   display: block;
 }
 
@@ -308,7 +308,7 @@
   top: 50%; transform: translateY(-50%);
   width: 42px; height: 42px;
   display: flex; align-items: center; justify-content: center;
-  border: 1px solid rgba(128,128,128,0.18);
+  border: 2px solid rgba(128,128,128,0.24);
   border-radius: 50%;
   background: rgba(0,0,0,0.68);
   color: var(--gray-400);

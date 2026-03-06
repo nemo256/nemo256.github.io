@@ -1,0 +1,93 @@
+.git-section {
+  padding: var(--section-py) var(--section-px);
+  border-top: 1px solid var(--gray-800);
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+}
+
+.git-section__inner {
+  max-width: 1100px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 48px;
+}
+
+.git-section__heading {
+  font-family: var(--font-display);
+  font-size: clamp(60px, 10vw, 130px);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 4px;
+  color: var(--gray-700);
+  text-transform: uppercase;
+}
+.git-section__heading-accent { color: var(--text); }
+
+.git-section__buttons {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ── Large CTA — icon only at rest, expands with label on hover ── */
+.git-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  /* Generous CTA sizing */
+  padding: 20px 28px;
+  background: var(--gray-900);
+  border: 1px solid var(--gray-800);
+  border-radius: 100px;
+  color: var(--gray-500);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: color 0.22s ease, border-color 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
+}
+.git-btn:hover {
+  color: var(--text);
+  border-color: var(--gray-600);
+  background: rgba(128,128,128,0.1);
+  box-shadow: 0 0 32px rgba(255,255,255,0.04);
+}
+
+.git-btn__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.git-btn__label {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 12px;
+  letter-spacing: 3px;
+}
+
+[data-theme="light"] .git-section__heading { color: var(--gray-400); }
+
+@media (max-width: 900px) {
+  .git-section__heading { letter-spacing: 2px; }
+  .git-section__inner { gap: 36px; }
+}
+
+@media (max-width: 480px) {
+  .git-section { padding: 64px 20px; }
+  .git-section__heading { font-size: clamp(48px, 15vw, 80px); letter-spacing: 1px; }
+  .git-section__buttons { gap: 12px; }
+  .git-btn { padding: 17px 22px; font-size: 11px; letter-spacing: 2.5px; }
+  .git-btn__label { font-size: 11px; letter-spacing: 2.5px; }
+}

@@ -13,6 +13,7 @@ import AboutSection from './components/AboutSection.jsx';
 import ProjectsSection from './components/ProjectsSection.jsx';
 import ExperienceSection from './components/ExperienceSection.jsx';
 import SkillsSection from './components/SkillsSection.jsx';
+import GetInTouch from './components/GetInTouch.jsx';
 import Footer from './components/Footer.jsx';
 
 import './styles/app.css';
@@ -40,6 +41,7 @@ export default function App() {
               <section id="projects"><ProjectsSection /></section>
               <section id="experience"><ExperienceSection /></section>
               <section id="skills"><SkillsSection /></section>
+              <GetInTouch />
               <Footer />
             </main>
           </>

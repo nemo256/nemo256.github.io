@@ -10,12 +10,12 @@ import './HeroSection.css';
 
 const WHATSAPP_URL = `https://wa.me/213794696605`;
 
-const PREFIX  = 'I DO ';
-const SUFFIX  = 'WEB DEVELOPMENT';
+const PREFIX  = 'I MAKE ';
+const WORDS   = ['WEBSITES', 'APPS'];
 const TYPE_SPEED   = 60;
 const DELETE_SPEED = 35;
 const PAUSE_FULL   = 1800;
-const PAUSE_PREFIX = 600;
+const PAUSE_EMPTY  = 500;
 
 const container = {
   hidden: {},
@@ -108,45 +108,44 @@ function NeggaziName() {
 }
 
 function TypingText() {
-  const [text, setText] = useState('');
-  const phase = useRef('idle');
-  const timer = useRef(null);
+  const [display, setDisplay]  = useState('');
+  const wordIdxRef             = useRef(0);
+  const charIdxRef             = useRef(0);
+  const timerRef               = useRef(null);
 
   useEffect(() => {
-    const startDelay = setTimeout(() => runPhase('typing'), 900);
-    return () => { clearTimeout(startDelay); clearTimeout(timer.current); };
+    const startDelay = setTimeout(() => schedule('typing'), 900);
+    return () => { clearTimeout(startDelay); clearTimeout(timerRef.current); };
   }, []);
 
-  function runPhase(nextPhase) {
-    phase.current = nextPhase;
+  function schedule(nextPhase) {
+    const word = WORDS[wordIdxRef.current];
     if (nextPhase === 'typing') {
-      let i = 0;
-      setText(PREFIX);
       const tick = () => {
-        i++;
-        setText(PREFIX + SUFFIX.slice(0, i));
-        if (i < SUFFIX.length) timer.current = setTimeout(tick, TYPE_SPEED);
-        else timer.current = setTimeout(() => runPhase('pause-full'), PAUSE_FULL);
+        charIdxRef.current++;
+        setDisplay(word.slice(0, charIdxRef.current));
+        if (charIdxRef.current < word.length) timerRef.current = setTimeout(tick, TYPE_SPEED);
+        else timerRef.current = setTimeout(() => schedule('deleting'), PAUSE_FULL);
       };
-      timer.current = setTimeout(tick, TYPE_SPEED);
+      timerRef.current = setTimeout(tick, TYPE_SPEED);
     }
-    if (nextPhase === 'pause-full')  timer.current = setTimeout(() => runPhase('deleting'), 0);
     if (nextPhase === 'deleting') {
-      let remaining = SUFFIX.length;
       const tick = () => {
-        remaining--;
-        setText(PREFIX + SUFFIX.slice(0, remaining));
-        if (remaining > 0) timer.current = setTimeout(tick, DELETE_SPEED);
-        else timer.current = setTimeout(() => runPhase('pause-prefix'), PAUSE_PREFIX);
+        charIdxRef.current--;
+        setDisplay(word.slice(0, charIdxRef.current));
+        if (charIdxRef.current > 0) timerRef.current = setTimeout(tick, DELETE_SPEED);
+        else {
+          wordIdxRef.current = (wordIdxRef.current + 1) % WORDS.length;
+          timerRef.current = setTimeout(() => schedule('typing'), PAUSE_EMPTY);
+        }
       };
-      timer.current = setTimeout(tick, DELETE_SPEED);
+      timerRef.current = setTimeout(tick, DELETE_SPEED);
     }
-    if (nextPhase === 'pause-prefix') timer.current = setTimeout(() => runPhase('typing'), 0);
   }
 
   return (
     <span className="hero__typed">
-      {text}<span className="hero__cursor">|</span>
+      {PREFIX}{display}<span className="hero__cursor">|</span>
     </span>
   );
 }
