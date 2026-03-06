@@ -15,7 +15,7 @@
   gap: 64px;
 }
 
-/* ── Top row: text left + photo right ── */
+/* ── Top row ── */
 .about__top-row {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -46,82 +46,120 @@
   max-width: 500px;
 }
 
-/* ── 3D Tilt card ── */
-.about__tilt-card {
+/* ══════════════════════════════
+   STACKED CARD WRAPPER
+   The two back cards sit behind
+   the front tilt card.
+   ══════════════════════════════ */
+.about__card-stack {
   position: relative;
   flex-shrink: 0;
+  /* size the stack — back cards extend 10px each side */
   width: clamp(240px, 24vw, 360px);
+  /* extra bottom padding so stacked cards underneath are visible */
+  padding-bottom: 22px;
+  perspective: 900px;
+}
+
+/* Shared back-card style */
+.about__card-back {
+  position: absolute;
+  left: 0; right: 0;
+  /* same aspect ratio as photo */
   aspect-ratio: 3 / 4;
-  border-radius: 24px;
+  border-radius: 20px;
+  border: 2px solid rgba(255,255,255,0.08);
+}
+
+/* Back card 1 — just behind, slightly rotated */
+.about__card-back--1 {
+  top: 8px;
+  transform: rotate(2.5deg) translateY(4px);
+  background: var(--gray-900);
+  border-color: rgba(255,255,255,0.07);
+  z-index: 1;
+}
+/* Back card 2 — furthest back, more rotation */
+.about__card-back--2 {
+  top: 14px;
+  transform: rotate(-3.5deg) translateY(8px);
+  background: var(--gray-900);
+  border-color: rgba(255,255,255,0.05);
+  z-index: 0;
+  opacity: 0.7;
+}
+
+/* Light mode back cards */
+[data-theme="light"] .about__card-back--1 {
+  background: var(--gray-900);
+  border-color: rgba(0,0,0,0.10);
+}
+[data-theme="light"] .about__card-back--2 {
+  background: var(--gray-900);
+  border-color: rgba(0,0,0,0.07);
+}
+
+/* ── Front tilt card ── */
+.about__tilt-card {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: 20px;
   overflow: hidden;
   cursor: none;
-  /* Dark mode: deep multi-layer shadow */
+  /* Dark mode shadow */
   box-shadow:
     0 2px 4px rgba(0,0,0,0.28),
     0 8px 20px rgba(0,0,0,0.38),
-    0 20px 48px rgba(0,0,0,0.42),
-    0 36px 70px rgba(0,0,0,0.26);
-  /* Visible border for both modes — overridden per theme below */
+    0 20px 48px rgba(0,0,0,0.42);
   border: 2px solid rgba(255,255,255,0.14);
   transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
-.about__tilt-card:hover {
-  box-shadow:
-    0 4px 8px rgba(0,0,0,0.32),
-    0 14px 30px rgba(0,0,0,0.46),
-    0 28px 64px rgba(0,0,0,0.5),
-    0 48px 90px rgba(0,0,0,0.32);
-  border-color: rgba(255,255,255,0.22);
-}
-/* Light mode: much subtler shadow + dark border */
+/* Light mode: subtle shadow + dark border */
 [data-theme="light"] .about__tilt-card {
   border: 2px solid rgba(0,0,0,0.18);
   box-shadow:
     0 2px 6px rgba(0,0,0,0.08),
     0 6px 18px rgba(0,0,0,0.10),
-    0 14px 36px rgba(0,0,0,0.10);
-}
-[data-theme="light"] .about__tilt-card:hover {
-  border-color: rgba(0,0,0,0.32);
-  box-shadow:
-    0 4px 10px rgba(0,0,0,0.10),
-    0 10px 28px rgba(0,0,0,0.14),
-    0 22px 50px rgba(0,0,0,0.14);
+    0 14px 32px rgba(0,0,0,0.10);
 }
 
+/* Photo — show full face on all screens */
 .about__photo {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: top center;
+  /* centre vertically so face is fully visible */
+  object-position: center top;
   display: block;
-  border-radius: 24px;
+  border-radius: 18px;
   position: relative;
   z-index: 1;
   pointer-events: none;
 }
 
-/* Dynamic glare that follows mouse */
+/* Glare layer */
 .about__tilt-glare {
   position: absolute;
   inset: 0;
   z-index: 2;
-  border-radius: 24px;
+  border-radius: 18px;
   pointer-events: none;
   mix-blend-mode: screen;
 }
 
-/* Inner shadow for bottom edge depth */
+/* Inner depth vignette */
 .about__tilt-shadow {
   position: absolute;
   inset: 0;
   z-index: 3;
-  border-radius: 24px;
+  border-radius: 18px;
   pointer-events: none;
-  box-shadow: inset 0 -60px 80px rgba(0,0,0,0.45), inset 0 0 0 1px rgba(255,255,255,0.06);
+  box-shadow: inset 0 -50px 70px rgba(0,0,0,0.38), inset 0 0 0 1px rgba(255,255,255,0.05);
 }
 
-/* ── Stats — centered, no divider ── */
+/* ── Stats — centered ── */
 .about__stats {
   display: flex;
   flex-direction: row;
@@ -158,7 +196,7 @@
 /* ── Tablet ── */
 @media (max-width: 900px) {
   .about__top-row { grid-template-columns: 1fr; gap: 40px; }
-  .about__tilt-card { order: -1; width: clamp(160px, 40vw, 250px); }
+  .about__card-stack { order: -1; width: clamp(180px, 42vw, 280px); }
   .about__stats { gap: 60px; }
   .about__heading { letter-spacing: 2px; }
 }
@@ -168,7 +206,24 @@
   .about { padding: 64px 20px; }
   .about__inner { gap: 44px; }
   .about__top-row { gap: 28px; }
-  .about__tilt-card { order: -1; width: 100%; aspect-ratio: 4 / 3; }
+
+  /* On mobile the stack goes full-width but we want the face to show fully.
+     Use a square-ish ratio so there's enough vertical space. */
+  .about__card-stack {
+    order: -1;
+    width: 75%;
+    margin: 0 auto;
+    /* square-ish: enough height to show full portrait */
+    padding-bottom: 18px;
+  }
+  .about__tilt-card {
+    aspect-ratio: 3 / 4;
+  }
+  /* Keep face centred and fully in frame on mobile */
+  .about__photo {
+    object-position: center 10%;
+  }
+
   .about__left { align-items: center; text-align: center; }
   .about__heading { font-size: clamp(38px, 13vw, 70px); letter-spacing: 1px; margin-bottom: 20px; }
   .about__body { font-size: 14px; max-width: 100%; }

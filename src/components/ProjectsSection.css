@@ -358,30 +358,42 @@
   .proj__card-desc { font-size: 13px; }
   .proj__card-body { padding: 28px 0 0; gap: 16px; }
 
-  /* Gallery overlay — scroll from below navbar */
+  /* Gallery overlay — bottom-anchored sheet for thumb reachability */
   .gallery-overlay {
     padding: 0;
-    align-items: flex-start;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    align-items: flex-end;      /* pin modal to bottom */
+    justify-content: center;
+    overflow: hidden;
   }
-  /* Backdrop stays fixed so it covers whole screen even when scrolled */
   .gallery-backdrop { position: fixed; }
-  /* Modal has top margin to clear the 58px navbar + breathing room */
+  /* Modal slides up from bottom, sits above safe-area / home indicator */
   .gallery-modal {
-    margin: 72px 16px 40px;
-    width: calc(100% - 32px);
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 20px 20px 0 0;
+    background: var(--bg);
+    border-top: 1px solid var(--gray-800);
+    padding: 20px 16px;
+    padding-bottom: max(24px, env(safe-area-inset-bottom, 24px));
+    gap: 12px;
   }
-  .gallery-img { max-height: 52vh; }
-  .gallery-close { top: -10px; right: -6px; width: 32px; height: 32px; font-size: 11px; }
-  .gallery-thumb { width: 56px; height: 36px; }
-  .gallery-arrow { width: 34px; height: 34px; }
+  /* Close button moves to top-right of the sheet */
+  .gallery-close {
+    top: 14px; right: 14px;
+    width: 32px; height: 32px; font-size: 11px;
+    position: absolute;
+  }
+  .gallery-img { max-height: 42vh; border-radius: 10px; }
+  .gallery-thumb { width: 52px; height: 34px; }
+  .gallery-arrow { width: 36px; height: 36px; }
   .gallery-arrow--left  { left: 6px; }
   .gallery-arrow--right { right: 6px; }
 }
 
 /* Light mode gallery overlay */
-[data-theme="light"] .gallery-overlay { background: rgba(255,255,255,0.97); }
+[data-theme="light"] .gallery-overlay { background: rgba(0,0,0,0.55); }
+[data-theme="light"] .gallery-modal { background: var(--bg); border-top-color: var(--gray-800); }
 [data-theme="light"] .gallery-close { background: rgba(0,0,0,0.08); border-color: rgba(0,0,0,0.15); }
 [data-theme="light"] .gallery-arrow { background: rgba(0,0,0,0.08); border-color: rgba(0,0,0,0.15); }
 [data-theme="light"] .proj__card-img-wrap { border-color: var(--gray-800); }
