@@ -271,11 +271,25 @@ export default function TopNav() {
   const [menuOpen,  setMenuOpen]  = useState(false);
   const [isMobile,  setIsMobile]  = useState(window.innerWidth <= 640);
   const [activeTab, setActiveTab] = useState('HOME');
+  const [navHeight, setNavHeight] = useState(58);
+  const navRef = useRef(null);
 
   useEffect(() => {
     const s = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', s, { passive: true });
     return () => window.removeEventListener('scroll', s);
+  }, []);
+
+  // Measure actual navbar height so drawer always starts just below it
+  useEffect(() => {
+    const nav = navRef.current;
+    if (!nav) return;
+    const ro = new ResizeObserver(() => {
+      setNavHeight(nav.getBoundingClientRect().height);
+    });
+    ro.observe(nav);
+    setNavHeight(nav.getBoundingClientRect().height);
+    return () => ro.disconnect();
   }, []);
 
   // Track which section is in view and update the active tab
@@ -325,7 +339,7 @@ export default function TopNav() {
 
   return (
     <>
-      <nav className={`topnav${scrolled ? ' topnav--scrolled' : ''}`}>
+      <nav ref={navRef} className={`topnav${scrolled ? ' topnav--scrolled' : ''}`}>
         <div className="topnav__slot-left">
           {isMobile ? <ResumeButton isMobile={true} /> : <LogoExpand onClick={e => go(e, '#home')} />}
         </div>
@@ -358,6 +372,7 @@ export default function TopNav() {
       <AnimatePresence>
         {menuOpen && (
           <motion.div className="drawer"
+            style={{ top: navHeight }}
             initial={{ opacity: 0, clipPath: 'inset(0 0 100% 0)' }}
             animate={{ opacity: 1, clipPath: 'inset(0 0 0% 0)' }}
             exit={{ opacity: 0, clipPath: 'inset(0 0 100% 0)' }}

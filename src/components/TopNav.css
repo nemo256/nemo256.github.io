@@ -220,7 +220,7 @@
    ═══════════════════════════════ */
 .drawer {
   position: fixed;
-  top: 58px;
+  top: 58px; /* fallback — overridden by inline style from JS measurement */
   left: 0; right: 0; bottom: 0;
   background: var(--bg);
   z-index: 299;

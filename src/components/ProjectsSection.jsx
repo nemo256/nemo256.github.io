@@ -1,5 +1,5 @@
 /* ProjectsSection.jsx */
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { ExternalLink, Github, ChevronLeft, ChevronRight, ChevronDown, LayoutGrid } from 'lucide-react';
 import { projects } from '../data/projects.js';
@@ -38,17 +38,27 @@ function GalleryOverlay({ project, onClose }) {
   const prev = () => setCurrent(i => (i - 1 + imgs.length) % imgs.length);
   const next = () => setCurrent(i => (i + 1) % imgs.length);
 
+  // Close on Escape key
+  useEffect(() => {
+    const onKey = e => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
   return (
     <motion.div className="gallery-overlay"
-      onClick={e => e.target === e.currentTarget && onClose()}
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}>
+
+      {/* Invisible full-screen backdrop — tap/click anywhere outside modal closes */}
+      <div className="gallery-backdrop" onClick={onClose} />
 
       <motion.div className="gallery-modal"
         initial={{ scale: 0.94, opacity: 0, y: 16 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
         exit={{ scale: 0.94, opacity: 0, y: 16 }}
-        transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}>
+        transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+        onClick={e => e.stopPropagation()}>
 
         {/* Close — minimal top-right X */}
         <button className="gallery-close" onClick={onClose}>✕</button>

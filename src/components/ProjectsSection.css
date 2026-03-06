@@ -239,6 +239,14 @@
   padding: 24px;
 }
 
+/* Full-screen tap-to-close backdrop behind the modal */
+.gallery-backdrop {
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+  z-index: 0;
+}
+
 .gallery-modal {
   width: 100%;
   max-width: 960px;
@@ -246,6 +254,7 @@
   flex-direction: column;
   gap: 16px;
   position: relative;
+  z-index: 1; /* above backdrop */
 }
 
 /* Minimal X — top-right corner of the modal */
